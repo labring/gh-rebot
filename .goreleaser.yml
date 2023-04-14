@@ -34,6 +34,9 @@ dockers:
       - --label=io.sealos.image.revision={{.ShortCommit}}
       - --label=io.sealos.image.version={{.Tag }}
       - --label=io.sealos.image.auth={{ .Env.USERNAME }}
+      - --label org.opencontainers.image.description="Automatically github bot for Sealos using comment and cmd"
+      - --label org.opencontainers.image.licenses="Apache 2.0"
+      - --label org.opencontainers.image.source="https://github.com/labring-actions/gh-rebot"
   - use: buildx
     ids:
       - gh-rebot
@@ -50,6 +53,9 @@ dockers:
       - --label=io.sealos.image.revision={{.ShortCommit}}
       - --label=io.sealos.image.version={{.Tag }}
       - --label=io.sealos.image.auth={{ .Env.USERNAME }}
+      - --label org.opencontainers.image.description="Automatically github bot for Sealos using comment and cmd"
+      - --label org.opencontainers.image.licenses="Apache 2.0"
+      - --label org.opencontainers.image.source="https://github.com/labring-actions/gh-rebot"
 docker_manifests:
   - name_template: ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}
     image_templates:
