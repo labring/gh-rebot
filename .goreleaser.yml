@@ -16,7 +16,14 @@ builds:
       - amd64
       - arm64
     ldflags:
-      - -s -w -X github.com/labring-actions/gh-rebot/pkg/version.gitVersion={{.Version}} -X github.com/labring-actions/gh-rebot/pkg/version.gitCommit={{.ShortCommit}} -X github.com/labring-actions/gh-rebot/pkg/version.buildDate={{.Date}}
+      - -s -w
+      - -X github.com/labring-actions/gh-rebot/pkg/version.gitVersion={{.Version}}
+      - -X github.com/labring-actions/gh-rebot/pkg/version.gitCommit={{.ShortCommit}}
+      - -X github.com/labring-actions/gh-rebot/pkg/version.buildDate={{.Date}}
+
+release:
+  prerelease: auto
+
 dockers:
   - use: buildx
     ids:
