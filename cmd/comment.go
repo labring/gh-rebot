@@ -18,12 +18,12 @@ import (
 // commentCmd represents the comment command
 var commentCmd = &cobra.Command{
 	Use:  "comment",
-	Args: cobra.ExactArgs(3),
+	Args: cobra.ExactArgs(2),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		comment := args[0]
 		issueID := args[1]
-		safeRepo := args[2]
 		runnerID := os.Getenv("GITHUB_RUN_ID")
+		safeRepo := os.Getenv("GITHUB_REPOSITORY")
 		runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", safeRepo, runnerID)
 		switch {
 		case strings.HasPrefix(comment, "/sealos_bot_release"):
@@ -45,8 +45,21 @@ var commentCmd = &cobra.Command{
 		if err := checkPermission(); err != nil {
 			return err
 		}
+		if err := checkGithubEnv(); err != nil {
+			return err
+		}
 		return nil
 	},
+}
+
+func checkGithubEnv() error {
+	if _, ok := os.LookupEnv("GITHUB_RUN_ID"); !ok {
+		return fmt.Errorf("error: GITHUB_RUN_ID is not set. Please set the GITHUB_RUN_ID environment variable")
+	}
+	if _, ok := os.LookupEnv("GITHUB_REPOSITORY"); !ok {
+		return fmt.Errorf("error: GITHUB_REPOSITORY is not set. Please set the GITHUB_REPOSITORY environment variable")
+	}
+	return nil
 }
 
 func init() {

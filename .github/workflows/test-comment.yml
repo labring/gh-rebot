@@ -51,4 +51,4 @@ jobs:
       - name: Test sub cmd
         run: |
           sudo chmod a+x /tmp/gh-rebot
-          /tmp/gh-rebot ${{ matrix.sub }} "${{github.event.comment.body}}"  ${{ github.event.issue.number }} ${{ github.repository_owner }}/gh-rebot
+          /tmp/gh-rebot ${{ matrix.sub }} "${{github.event.comment.body}}"  ${{ github.event.issue.number }} 

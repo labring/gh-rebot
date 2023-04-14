@@ -27,20 +27,20 @@ import (
 	"strings"
 )
 
-var reviews []string
-
-// changelogCmd represents the changelog command
 var changelogCmd = &cobra.Command{
-	Use: "changelog",
+	Use:  "changelog",
+	Args: cobra.MaximumNArgs(1),
 	RunE: func(cmd *cobra.Command, args []string) error {
+		var reviews []string
+		if len(args) == 0 {
+			reviews = []string{"cuisongliu"}
+		} else {
+			reviews = strings.Split(args[0], ",")
+		}
 		return gh.Changelog(reviews)
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		printEnvs()
-		if len(reviews) == 0 {
-			reviews = []string{"cuisongliu"}
-		}
-
 		if err := checkPermission(); err != nil {
 			return err
 		}
@@ -73,7 +73,6 @@ func checkPermission() error {
 
 func init() {
 	rootCmd.AddCommand(changelogCmd)
-	changelogCmd.Flags().StringSliceVarP(&reviews, "reviews", "r", []string{}, "reviewers")
 
 	// Here you will define your flags and configuration settings.
 
