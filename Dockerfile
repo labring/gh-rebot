@@ -1,4 +1,6 @@
-FROM alpine:3.16.2
+ARG TARGETARCH
+
+FROM --platform=linux/${TARGETARCH} alpine:3.16.2
 
 MAINTAINER "Sealos Inc."
 

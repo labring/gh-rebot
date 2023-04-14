@@ -31,9 +31,9 @@ jobs:
           username: ${{ github.repository_owner }}
           password: ${{ secrets.G_REGISTRY_TOKEN }}
       - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v3
+        uses: goreleaser/goreleaser-action@v4
         with:
-          args: release  --timeout=1h
+          args: release  --timeout=1h --debug
         env:
           GITHUB_TOKEN: ${{ secrets.G_REGISTRY_TOKEN }}
           VERSION: ${{ steps.prepare.outputs.tag_name }}
