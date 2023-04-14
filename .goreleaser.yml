@@ -36,6 +36,7 @@ dockers:
     build_flag_templates:
       - --pull
       - --platform=linux/amd64
+      - --build-arg=TARGETARCH=amd64
       - --label=io.sealos.image.created={{.Date}}
       - --label=io.sealos.image.title=gh-rebot
       - --label=io.sealos.image.revision={{.ShortCommit}}
@@ -55,6 +56,7 @@ dockers:
     build_flag_templates:
       - --pull
       - --platform=linux/arm64
+      - --build-arg=TARGETARCH=arm64
       - --label=io.sealos.image.created={{.Date}}
       - --label=io.sealos.image.title=gh-rebot
       - --label=io.sealos.image.revision={{.ShortCommit}}
