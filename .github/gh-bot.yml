@@ -1,0 +1,19 @@
+version: v1
+debug: true
+bot:
+  allowOps:
+  - cuisongliu
+  - sealos-ci-robot
+  - sealos-release-robot
+  email: sealos-ci-robot@sealos.io
+  username: sealos-ci-robot
+repo:
+  org: true
+  name: labring-actions/sealos
+  fork: cuisongliu/sealos
+
+message:
+  release_success: |
+      🤖 says: release action finished successfully 🎉
+  release_format_error: |
+      🤖 says: ‼️ release action format error, please check the format of the release action.

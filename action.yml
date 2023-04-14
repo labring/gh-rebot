@@ -1,0 +1,28 @@
+name: 'Github bot for Sealos'
+description: 'Automatically github bot for Sealos using comment'
+author: 'Sealos Inc.'
+branding:
+  icon: 'users'
+  color: 'purple'
+inputs:
+  version:
+    description: 'Version of gh-rebot'
+    required: true
+
+runs:
+  using: "composite"
+  steps:
+    - uses: actions/checkout@v3
+    - run: |
+        sudo mkdir -p /tmp/.sealos-action
+        sudo cp -rf /home/runner/work/_actions/labring/sealos-action/v0.0.3/* /tmp/.sealos-action/
+        bash /tmp/.sealos-action/action.sh
+      shell: bash
+      id: default
+      env:
+        cmd: ${{ inputs.type }}
+        sealos_version: ${{ inputs.sealosVersion }}
+        sealosGit: ${{ inputs.sealosGit }}
+        goAddr: ${{ inputs.goAddr }}
+        action_directory: .sealos-action
+      working-directory: ${{ inputs.working-directory }}

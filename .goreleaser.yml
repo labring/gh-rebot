@@ -1,0 +1,76 @@
+before:
+  hooks:
+    # You may remove this if you don't use go modules.
+    - go mod download
+    # you may remove this if you don't need go generate
+    - go generate ./...
+builds:
+  - id: gh-rebot
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
+      - arm64
+    ldflags:
+      - -s -w -X github.com/labring-actions/gh-rebot/pkg/version.gitVersion={{.Version}} -X github.com/labring-actions/gh-rebot/pkg/version.gitCommit={{.ShortCommit}} -X github.com/labring-actions/gh-rebot/pkg/version.buildDate={{.Date}}
+dockers:
+  - use: buildx
+    ids:
+      - gh-rebot
+    goos: linux
+    goarch: amd64
+    image_templates:
+      - ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}-amd64
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - --pull
+      - --platform=linux/amd64
+      - --label=io.sealos.image.created={{.Date}}
+      - --label=io.sealos.image.title=gh-rebot
+      - --label=io.sealos.image.revision={{.ShortCommit}}
+      - --label=io.sealos.image.version={{.Tag }}
+      - --label=io.sealos.image.auth={{ .Env.USERNAME }}
+  - use: buildx
+    ids:
+      - gh-rebot
+    goos: linux
+    goarch: arm64
+    image_templates:
+      - ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}-arm64
+    dockerfile: Dockerfile
+    build_flag_templates:
+      - --pull
+      - --platform=linux/arm64
+      - --label=io.sealos.image.created={{.Date}}
+      - --label=io.sealos.image.title=gh-rebot
+      - --label=io.sealos.image.revision={{.ShortCommit}}
+      - --label=io.sealos.image.version={{.Tag }}
+      - --label=io.sealos.image.auth={{ .Env.USERNAME }}
+docker_manifests:
+  - name_template: ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}
+    image_templates:
+      - ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}-amd64
+      - ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}-arm64
+
+
+#archives:
+#  - replacements:
+#      darwin: darwin
+#      linux: linux
+#      windows: windows
+#      amd64: amd64
+#      arm64: arm64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+      - '^docs:'
+      - '^test:'

@@ -1,0 +1,52 @@
+name: TestSuit
+on:
+  workflow_dispatch:
+env:
+  # Common versions
+  GH_TOKEN: "${{ secrets.GH_PAT }}"
+  SEALOS_SYS_TRIGGER: "${{ github.event.sender.login }}"
+jobs:
+  build-bot:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20.x
+
+      - name: Check out code into the Go module directory
+        uses: actions/checkout@v2
+
+      - name: Run GoReleaser
+        uses: goreleaser/goreleaser-action@v1
+        with:
+          version: latest
+          args: build --snapshot --rm-dist  --timeout=1h
+
+      - name: Save Binaries
+        uses: actions/upload-artifact@v3
+        with:
+          name: gh-rebot
+          path: dist/gh-rebot_linux_amd64_v1/gh-rebot
+  test:
+    needs: [ build-bot ]
+    name: Build
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        sub:
+          - version
+          - changelog
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Download gh-rebot
+        uses: actions/download-artifact@v3
+        with:
+          name: gh-rebot
+          path: /tmp/
+
+      - name: Test sub cmd
+        run: |
+          sudo chmod a+x /tmp/gh-rebot
+          /tmp/gh-rebot ${{ matrix.sub }}
