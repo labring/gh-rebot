@@ -25,7 +25,6 @@ jobs:
         run: |
           TAG=${GITHUB_REF#refs/tags/}
           echo tag_name=${TAG} >> $GITHUB_OUTPUT
-      - uses: sigstore/cosign-installer@v3.0.1
       - uses: docker/setup-qemu-action@e81a89b1732b9c48d79cd809d8d81d79c4647a18 # v2
       - uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2
       - name: Login to GitHub Container Registry

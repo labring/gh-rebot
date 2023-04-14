@@ -114,14 +114,6 @@ changelog:
       order: 400
     - title: Other work
       order: 9999
-docker_signs:
-  - cmd: cosign
-    artifacts: manifests
-    output: true
-    args:
-      - 'sign'
-      - '${artifact}@${digest}'
-      - --yes
 
 release:
   prerelease: auto
