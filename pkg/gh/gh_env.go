@@ -17,6 +17,7 @@ limitations under the License.
 package gh
 
 import (
+	"fmt"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -36,6 +37,11 @@ type GithubVar struct {
 
 func (g *GithubVar) String() string {
 	return "RunnerID: " + g.RunnerID + " SafeRepo: " + g.SafeRepo + " IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " CommentBody: " + g.CommentBody + " SenderOrCommentUser: " + g.SenderOrCommentUser
+}
+
+func (g *GithubVar) GetRunnerURL() string {
+	runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", g.SafeRepo, g.RunnerID)
+	return runnerURL
 }
 
 func GetGHEnvToVar() (*GithubVar, error) {

@@ -85,7 +85,7 @@ func checkRemoteTagExists(tag string) (bool, error) {
 	return false, nil
 }
 
-func SendMsgToIssue(issueID int64, msg, runnerURL, safeRepo string) error {
-	cmd := fmt.Sprintf("gh issue comment %d --body \"%s\" --repo %s", issueID, msg+" <br/>See: "+runnerURL, safeRepo)
+func SendMsgToIssue(msg string) error {
+	cmd := fmt.Sprintf("gh issue comment %d --body \"%s\" --repo %s", GlobalsGithubVar.IssueOrPRNumber, msg+" <br/>See: "+GlobalsGithubVar.GetRunnerURL(), GlobalsGithubVar.SafeRepo)
 	return utils.RunCommand("bash", "-c", cmd)
 }

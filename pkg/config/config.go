@@ -37,7 +37,7 @@ func ParseConfig(filePath string) (*Config, error) {
 		return nil, err
 	}
 	if token, ok := os.LookupEnv("GH_TOKEN"); ok {
-		config.SetToken(token)
+		config.Token = token
 	}
 	if config.Repo.Org {
 		config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])

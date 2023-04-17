@@ -4,11 +4,8 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
-	"fmt"
-	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/labring-actions/gh-rebot/pkg/workflow"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -19,58 +16,22 @@ var commentCmd = &cobra.Command{
 	Use:  "comment",
 	Args: cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		safeRepo := gh.GlobalsGithubVar.SafeRepo
-		runnerID := gh.GlobalsGithubVar.RunnerID
 		comment := gh.GlobalsGithubVar.CommentBody
-		issueID := gh.GlobalsGithubVar.IssueOrPRNumber
-		runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", safeRepo, runnerID)
+		wf := workflow.NewWorkflow(comment)
 		switch {
 		case strings.HasPrefix(comment, "/sealos_bot_release"):
-			data := strings.Split(comment, " ")
-			if len(data) == 2 && utils.ValidateVersion(data[1]) {
-
-				msg := config.GlobalsConfig.GetMessage("release_success", "release action finished successfully!")
-				return gh.SendMsgToIssue(issueID, msg, runnerURL, safeRepo)
-			} else {
-				msg := config.GlobalsConfig.GetMessage("release_format_error", "release action failed!")
-				logger.Error("command format is error: %s ex. /sealos_bot_release {tag}", comment)
-				return gh.SendMsgToIssue(issueID, msg, runnerURL, safeRepo)
-			}
+			return wf.Release()
+		case strings.HasPrefix(comment, "/sealos_bot_changelog"):
+			return wf.Changelog()
 		}
 		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		printEnvs()
-		var err error
-		gh.GlobalsGithubVar, err = gh.GetGHEnvToVar()
-		if err != nil {
-			return err
-		}
-		logger.Debug("github env to var: %v", gh.GlobalsGithubVar)
-		if err = checkPermission(); err != nil {
-			return err
-		}
-		if err = checkGithubEnv(); err != nil {
+		if err := preCheck(); err != nil {
 			return err
 		}
 		return nil
 	},
-}
-
-func checkGithubEnv() error {
-	if gh.GlobalsGithubVar.RunnerID == "" {
-		return fmt.Errorf("error: GITHUB_RUN_ID is not set. Please set the GITHUB_RUN_ID environment variable")
-	}
-	if gh.GlobalsGithubVar.SafeRepo == "" {
-		return fmt.Errorf("error: not found repository.full_name in github event")
-	}
-	if gh.GlobalsGithubVar.CommentBody == "" {
-		return fmt.Errorf("error: not found comment.body in github event")
-	}
-	if gh.GlobalsGithubVar.IssueOrPRNumber == 0 {
-		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")
-	}
-	return nil
 }
 
 func init() {
