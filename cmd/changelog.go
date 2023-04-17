@@ -41,7 +41,13 @@ var changelogCmd = &cobra.Command{
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		printEnvs()
-		if err := checkPermission(); err != nil {
+		var err error
+		gh.GlobalsGithubVar, err = gh.GetGHEnvToVar()
+		if err != nil {
+			return err
+		}
+		logger.Debug("github env to var: %v", gh.GlobalsGithubVar)
+		if err = checkPermission(); err != nil {
 			return err
 		}
 		return nil
@@ -61,12 +67,12 @@ func checkPermission() error {
 	if len(ops) == 0 {
 		return errors.New("Error: config bot.triggers is not set. Please set the bot.allowOps to config yaml.")
 	}
-	if tigger, ok := os.LookupEnv("SEALOS_SYS_TRIGGER"); !ok {
-		return errors.New("Error: SEALOS_SYS_TRIGGER is not set. Please set the SEALOS_SYS_TRIGGER environment variable.")
-	} else {
-		if !utils.In(ops, tigger) {
-			return errors.New("Error: no has permission to trigger this action.")
-		}
+	tigger := gh.GlobalsGithubVar.SenderOrCommentUser
+	if tigger == "" {
+		return errors.New("Error: github sender or comment is empty.")
+	}
+	if !utils.In(ops, tigger) {
+		return errors.New("Error: no has permission to trigger this action.")
 	}
 	return nil
 }

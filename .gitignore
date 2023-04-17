@@ -1,5 +1,4 @@
 .idea
-*.json
 *.log
 test.sh
 dist

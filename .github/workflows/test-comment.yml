@@ -6,7 +6,6 @@ on:
 env:
   # Common versions
   GH_TOKEN: "${{ secrets.GH_PAT }}"
-  SEALOS_SYS_TRIGGER: "${{ github.event.comment.user.login }}"
 jobs:
   build-bot:
     if: startswith(github.event.comment.body, '/sealos_bot')
@@ -51,4 +50,4 @@ jobs:
       - name: Test sub cmd
         run: |
           sudo chmod a+x /tmp/gh-rebot
-          /tmp/gh-rebot ${{ matrix.sub }} "${{github.event.comment.body}}"  ${{ github.event.issue.number }} 
+          /tmp/gh-rebot ${{ matrix.sub }}

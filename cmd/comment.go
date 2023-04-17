@@ -9,7 +9,6 @@ import (
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
-	"os"
 	"strings"
 
 	"github.com/spf13/cobra"
@@ -18,15 +17,12 @@ import (
 // commentCmd represents the comment command
 var commentCmd = &cobra.Command{
 	Use:  "comment",
-	Args: cobra.ExactArgs(2),
+	Args: cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
-		comment := args[0]
-		issueID := args[1]
-		runnerID := os.Getenv("GITHUB_RUN_ID")
-		safeRepo := os.Getenv("GITHUB_REPOSITORY")
-		path := os.Getenv("GITHUB_EVENT_PATH")
-		data, _ := os.ReadFile(path)
-		logger.Debug("data: %s", string(data))
+		safeRepo := gh.GlobalsGithubVar.SafeRepo
+		runnerID := gh.GlobalsGithubVar.RunnerID
+		comment := gh.GlobalsGithubVar.CommentBody
+		issueID := gh.GlobalsGithubVar.IssueOrPRNumber
 		runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", safeRepo, runnerID)
 		switch {
 		case strings.HasPrefix(comment, "/sealos_bot_release"):
@@ -45,10 +41,16 @@ var commentCmd = &cobra.Command{
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
 		printEnvs()
-		if err := checkPermission(); err != nil {
+		var err error
+		gh.GlobalsGithubVar, err = gh.GetGHEnvToVar()
+		if err != nil {
 			return err
 		}
-		if err := checkGithubEnv(); err != nil {
+		logger.Debug("github env to var: %v", gh.GlobalsGithubVar)
+		if err = checkPermission(); err != nil {
+			return err
+		}
+		if err = checkGithubEnv(); err != nil {
 			return err
 		}
 		return nil
@@ -56,11 +58,17 @@ var commentCmd = &cobra.Command{
 }
 
 func checkGithubEnv() error {
-	if _, ok := os.LookupEnv("GITHUB_RUN_ID"); !ok {
+	if gh.GlobalsGithubVar.RunnerID == "" {
 		return fmt.Errorf("error: GITHUB_RUN_ID is not set. Please set the GITHUB_RUN_ID environment variable")
 	}
-	if _, ok := os.LookupEnv("GITHUB_REPOSITORY"); !ok {
-		return fmt.Errorf("error: GITHUB_REPOSITORY is not set. Please set the GITHUB_REPOSITORY environment variable")
+	if gh.GlobalsGithubVar.SafeRepo == "" {
+		return fmt.Errorf("error: not found repository.full_name in github event")
+	}
+	if gh.GlobalsGithubVar.CommentBody == "" {
+		return fmt.Errorf("error: not found comment.body in github event")
+	}
+	if gh.GlobalsGithubVar.IssueOrPRNumber == "" {
+		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")
 	}
 	return nil
 }

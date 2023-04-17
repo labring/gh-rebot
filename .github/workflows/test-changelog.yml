@@ -4,7 +4,6 @@ on:
 env:
   # Common versions
   GH_TOKEN: "${{ secrets.GH_PAT }}"
-  SEALOS_SYS_TRIGGER: "${{ github.event.sender.login }}"
 jobs:
   build-bot:
     runs-on: ubuntu-latest
