@@ -33,7 +33,7 @@ const (
 	cloneRepo         = "rm -rf /tmp/fork-sealos-repo && gh repo clone %s /tmp/fork-sealos-repo"
 	setToken          = "cd /tmp/fork-sealos-repo && git remote set-url origin https://%s:%s@github.com/%s.git"
 	newBranch         = "cd /tmp/fork-sealos-repo && git checkout -b %s"
-	generateChangelog = "cd /tmp/fork-sealos-repo && bash scripts/changelog-generate.sh"
+	generateChangelog = "cd /tmp/fork-sealos-repo && bash %s"
 	gitStatus         = "cd /tmp/fork-sealos-repo && git status"
 	gitAdd            = "cd /tmp/fork-sealos-repo && git add -A"
 	gitCommit         = "cd /tmp/fork-sealos-repo && git commit -am '%s' -s"
@@ -87,7 +87,7 @@ func Changelog(reviews []string) error {
 	}
 	shells := []string{
 		fmt.Sprintf(newBranch, branchName),
-		generateChangelog,
+		fmt.Sprintf(generateChangelog, config.GlobalsConfig.GetChangelogScript()),
 	}
 	if err := execFn(shells); err != nil {
 		return err

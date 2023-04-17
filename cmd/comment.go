@@ -24,6 +24,8 @@ var commentCmd = &cobra.Command{
 		issueID := args[1]
 		runnerID := os.Getenv("GITHUB_RUN_ID")
 		safeRepo := os.Getenv("GITHUB_REPOSITORY")
+		path := os.Getenv("GITHUB_EVENT_PATH")
+		logger.Debug("path: %s", path)
 		runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", safeRepo, runnerID)
 		switch {
 		case strings.HasPrefix(comment, "/sealos_bot_release"):

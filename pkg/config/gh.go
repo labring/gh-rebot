@@ -21,9 +21,10 @@ var (
 )
 
 type Bot struct {
-	AllowOps []string `json:"allowOps"`
-	Email    string   `json:"email"`
-	Username string   `json:"username"`
+	AllowOps  []string `json:"allowOps"`
+	Email     string   `json:"email"`
+	Username  string   `json:"username"`
+	Changelog string   `json:"changelog"`
 }
 
 // GetAllowOps returns the triggers for the bot
@@ -97,4 +98,11 @@ func (c *Config) GetMessage(key, defaultVal string) string {
 		return c.Message[key]
 	}
 	return defaultVal
+}
+
+func (c *Config) GetChangelogScript() string {
+	if c.Bot.Changelog == "" {
+		return "scripts/changelog.sh"
+	}
+	return c.Bot.Changelog
 }
