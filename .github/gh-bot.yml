@@ -7,13 +7,13 @@ bot:
     - sealos-release-robot
   email: sealos-ci-robot@sealos.io
   username: sealos-ci-robot
-  changelog: scripts/changelog.sh
 repo:
   org: true
   name: labring-actions/sealos
   fork: cuisongliu/sealos
 
 changelog:
+  script: scripts/changelog.sh
   allowOps:
     - cuisongliu
   reviewers:

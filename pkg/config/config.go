@@ -21,11 +21,10 @@ var (
 )
 
 type Bot struct {
-	Prefix    string   `json:"prefix"`
-	AllowOps  []string `json:"allowOps"`
-	Email     string   `json:"email"`
-	Username  string   `json:"username"`
-	Changelog string   `json:"changelog"`
+	Prefix   string   `json:"prefix"`
+	AllowOps []string `json:"allowOps"`
+	Email    string   `json:"email"`
+	Username string   `json:"username"`
 }
 
 type Repo struct {
@@ -38,6 +37,7 @@ type Repo struct {
 type Changelog struct {
 	AllowOps  []string `json:"allowOps"`
 	Reviewers []string `json:"reviewers"`
+	Script    string   `json:"script"`
 }
 
 type Release struct {
@@ -112,8 +112,8 @@ func (c *Config) GetMessage(key string) string {
 }
 
 func (c *Config) GetChangelogScript() string {
-	if c.Bot.Changelog == "" {
+	if c.Changelog.Script == "" {
 		return "scripts/changelog.sh"
 	}
-	return c.Bot.Changelog
+	return c.Changelog.Script
 }
