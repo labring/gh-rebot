@@ -21,6 +21,7 @@ import (
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/util/json"
 	"os"
+	"strconv"
 )
 
 var GlobalsGithubVar *GithubVar
@@ -28,13 +29,13 @@ var GlobalsGithubVar *GithubVar
 type GithubVar struct {
 	RunnerID            string
 	SafeRepo            string
-	IssueOrPRNumber     string
+	IssueOrPRNumber     int64
 	CommentBody         string
 	SenderOrCommentUser string
 }
 
 func (g *GithubVar) String() string {
-	return "RunnerID: " + g.RunnerID + " SafeRepo: " + g.SafeRepo + " IssueOrPRNumber: " + g.IssueOrPRNumber + " CommentBody: " + g.CommentBody + " SenderOrCommentUser: " + g.SenderOrCommentUser
+	return "RunnerID: " + g.RunnerID + " SafeRepo: " + g.SafeRepo + " IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " CommentBody: " + g.CommentBody + " SenderOrCommentUser: " + g.SenderOrCommentUser
 }
 
 func GetGHEnvToVar() (*GithubVar, error) {
@@ -50,9 +51,9 @@ func GetGHEnvToVar() (*GithubVar, error) {
 	if err := json.Unmarshal(eventData, &mData); err != nil {
 		return nil, errors.Wrap(err, "unmarshal github event data")
 	}
-	id, ok, _ := unstructured.NestedString(mData, "issue", "number")
+	id, ok, _ := unstructured.NestedInt64(mData, "issue", "number")
 	if !ok {
-		id, _, _ = unstructured.NestedString(mData, "pull_request", "number")
+		id, _, _ = unstructured.NestedInt64(mData, "pull_request", "number")
 	}
 	gVar.IssueOrPRNumber = id
 	gVar.SafeRepo, _, _ = unstructured.NestedString(mData, "repository", "full_name")

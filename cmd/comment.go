@@ -67,7 +67,7 @@ func checkGithubEnv() error {
 	if gh.GlobalsGithubVar.CommentBody == "" {
 		return fmt.Errorf("error: not found comment.body in github event")
 	}
-	if gh.GlobalsGithubVar.IssueOrPRNumber == "" {
+	if gh.GlobalsGithubVar.IssueOrPRNumber == 0 {
 		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")
 	}
 	return nil
