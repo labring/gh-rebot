@@ -3,7 +3,6 @@ debug: true
 bot:
   prefix: /sealos_bot
   allowOps:
-    - cuisongliu
     - sealos-ci-robot
     - sealos-release-robot
   email: sealos-ci-robot@sealos.io
@@ -16,13 +15,13 @@ repo:
 
 changelog:
   allowOps:
-    - bot
+    - cuisongliu
   reviewers:
     - cuisongliu
 
 release:
   allowOps:
-    - bot
+    - cuisongliu
 
 message:
   success: |
