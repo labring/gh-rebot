@@ -161,7 +161,7 @@ release:
     Here, `OPTIONS` are the options you want to pass to gh-rebot.
 
   footer: |
-    **Full Changelog**: https://github.com/goreleaser/goreleaser/compare/{{ .PreviousTag }}...{{ .Tag }}
+    **Full Changelog**: https://github.com/{{ .Env.USERNAME }}/gh-rebot/compare/{{ .PreviousTag }}...{{ .Tag }}
 
     * * *
     
