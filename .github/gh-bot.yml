@@ -1,7 +1,7 @@
 version: v1
 debug: true
 bot:
-  prefix: /sealos_bot
+  prefix: /sealos
   allowOps:
     - sealos-ci-robot
     - sealos-release-robot
@@ -30,3 +30,5 @@ message:
     🤖 says: ‼️ this action format error, please check the format of this action.
   permission_error: |
     🤖 says: ‼️ no has permission to trigger this action.
+  release_error: |
+    🤖 says: ‼️ this action release error, please check release of this action.

@@ -16,45 +16,104 @@ limitations under the License.
 
 package config
 
-import (
-	"fmt"
-	"k8s.io/apimachinery/pkg/util/yaml"
-	"os"
-	"strings"
+var (
+	GlobalsConfig *Config
 )
 
-func ParseConfig(filePath string) (*Config, error) {
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
-
-	config := &Config{}
-	decoder := yaml.NewYAMLOrJSONDecoder(file, 1024)
-	err = decoder.Decode(config)
-	if err != nil {
-		return nil, err
-	}
-	if token, ok := os.LookupEnv("GH_TOKEN"); ok {
-		config.Token = token
-	}
-	if config.Repo.Org {
-		config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])
-	}
-	return config, nil
+type Bot struct {
+	Prefix    string   `json:"prefix"`
+	AllowOps  []string `json:"allowOps"`
+	Email     string   `json:"email"`
+	Username  string   `json:"username"`
+	Changelog string   `json:"changelog"`
 }
 
-func LoadConfig(cfg string) (*Config, error) {
-	configPaths := []string{".github/gh-bot.yml", ".github/gh-bot.yaml", cfg}
-	for _, configPath := range configPaths {
-		if _, err := os.Stat(configPath); err == nil {
-			config, err := ParseConfig(configPath)
-			if err != nil {
-				return nil, fmt.Errorf("error parsing config file %s: %v", configPath, err)
-			}
-			return config, nil
-		}
+type Repo struct {
+	Org        bool   `json:"org"`
+	OrgCommand string `json:"-"`
+	Name       string `json:"name"`
+	Fork       string `json:"fork"`
+}
+
+type Changelog struct {
+	AllowOps  []string `json:"allowOps"`
+	Reviewers []string `json:"reviewers"`
+}
+
+type Release struct {
+	AllowOps []string `json:"allowOps"`
+}
+
+type Config struct {
+	Version string            `json:"version"`
+	Debug   bool              `json:"debug"`
+	Bot     Bot               `json:"bot"`
+	Repo    Repo              `json:"repo"`
+	Message map[string]string `json:"message"`
+	Token   string            `json:"-"`
+
+	Changelog Changelog `json:"changelog"`
+	Release   Release   `json:"release"`
+}
+
+// GetPrefix returns the prefix for the bot
+func (r *Config) GetPrefix() string {
+	if r.Bot.Prefix == "" {
+		return "/gh_bot"
 	}
-	return nil, fmt.Errorf("no valid config file found")
+	return r.Bot.Prefix
+}
+
+// GetBotAllowOps returns the triggers for the bot
+func (r *Config) GetBotAllowOps() []string {
+	return r.Bot.AllowOps
+}
+
+// GetEmail returns the email for the bot
+func (r *Config) GetEmail() string {
+	return r.Bot.Email
+}
+
+// GetUsername returns the username for the bot
+func (r *Config) GetUsername() string {
+	return r.Bot.Username
+}
+
+// GetOrgCommand returns the org command for the repo
+func (r *Config) GetOrgCommand() string {
+	return r.Repo.OrgCommand
+}
+
+// GetRepoName returns the name for the repo
+func (r *Config) GetRepoName() string {
+	return r.Repo.Name
+}
+
+// GetForkName returns the fork for the repo
+func (r *Config) GetForkName() string {
+	return r.Repo.Fork
+}
+
+// GetDebug returns the debug for the config
+func (c *Config) GetDebug() bool {
+	return c.Debug
+}
+
+// GetToken returns the token for the config
+func (c *Config) GetToken() string {
+	return c.Token
+}
+
+func (c *Config) GetMessage(key string) string {
+	if c.Message[key] != "" {
+		return c.Message[key]
+	}
+	return ""
+}
+
+func (c *Config) GetChangelogScript() string {
+	if c.Bot.Changelog == "" {
+		return "scripts/changelog.sh"
+	}
+	return c.Bot.Changelog
 }

@@ -34,7 +34,10 @@ func (c *workflow) Release() error {
 	}
 	data := strings.Split(c.Body, " ")
 	if len(data) == 2 && utils.ValidateVersion(data[1]) {
-
+		err := gh.Tag(data[1])
+		if err != nil {
+			return sendMsgToIssue("release_error")
+		}
 		return sendMsgToIssue("success")
 	} else {
 		logger.Error("command format is error: %s ex. /{prefix}_release {tag}", c.Body)

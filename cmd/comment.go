@@ -4,6 +4,7 @@ Copyright © 2023 NAME HERE <EMAIL ADDRESS>
 package cmd
 
 import (
+	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/workflow"
 	"strings"
@@ -19,9 +20,11 @@ var commentCmd = &cobra.Command{
 		comment := gh.GlobalsGithubVar.CommentBody
 		wf := workflow.NewWorkflow(comment)
 		switch {
-		case strings.HasPrefix(comment, "/sealos_bot_release"):
+		//{prefix}_release
+		case strings.HasPrefix(comment, strings.Join([]string{config.GlobalsConfig.GetPrefix(), "release"}, "_")):
 			return wf.Release()
-		case strings.HasPrefix(comment, "/sealos_bot_changelog"):
+		//{prefix}_changelog
+		case strings.HasPrefix(comment, strings.Join([]string{config.GlobalsConfig.GetPrefix(), "changelog"}, "_")):
 			return wf.Changelog()
 		}
 		return nil
