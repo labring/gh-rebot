@@ -18,6 +18,7 @@ package gh
 
 import (
 	"fmt"
+	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"k8s.io/client-go/util/retry"
@@ -28,14 +29,17 @@ type RetryShell string
 
 var execFn = func(shells []any) error {
 	for _, sh := range shells {
-		if s, ok := sh.(string); ok {
-			if err := utils.RunCommand("bash", "-c", s); err != nil {
-				return err
-			}
-		} else if s, ok := sh.(RetryShell); ok {
+		if s, ok := sh.(RetryShell); ok {
+			logger.Debug("retry shell: %s", s)
 			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
 				return utils.RunCommand("bash", "-c", string(s))
 			})
+		}
+		if s, ok := sh.(string); ok {
+			logger.Debug("once shell: %s", s)
+			if err := utils.RunCommand("bash", "-c", s); err != nil {
+				return err
+			}
 		}
 	}
 	return nil
