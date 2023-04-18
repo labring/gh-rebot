@@ -16,9 +16,9 @@ limitations under the License.
 
 package utils
 
-import "github.com/hashicorp/go-version"
+import sv2 "github.com/Masterminds/semver/v3"
 
 func ValidateVersion(v string) bool {
-	_, err := version.NewSemver(v)
+	_, err := sv2.NewVersion(v)
 	return err == nil
 }

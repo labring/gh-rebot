@@ -14,14 +14,17 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package gh
+package bot
 
-import "testing"
+import (
+	"github.com/labring-actions/gh-rebot/pkg/config"
+	"strings"
+)
 
-func Test_checkRemoteTagExists(t *testing.T) {
-	GlobalsGithubVar = new(GithubVar)
-	GlobalsGithubVar.IssueOrPRNumber = 1
-	GlobalsGithubVar.SafeRepo = "cuisongliu/sealos"
-	GlobalsGithubVar.RunnerID = "12345445"
-	SendMsgToIssue("default", "https://baidu.com", "https://sealos.io")
+func GetReleaseComment() string {
+	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "release"}, "_")
+}
+
+func GetChangelogComment() string {
+	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "changelog"}, "_")
 }

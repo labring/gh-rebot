@@ -20,15 +20,18 @@ changelog:
     - cuisongliu
 
 release:
+  action: Release
   allowOps:
     - cuisongliu
 
 message:
   success: |
-    🤖 says: this action finished successfully 🎉
+    🤖 says: The action {{.Body}} finished successfully 🎉
   format_error: |
-    🤖 says: ‼️ this action format error, please check the format of this action.
+    🤖 says: ‼️ The action format error, please check the format of this action.
   permission_error: |
-    🤖 says: ‼️ no has permission to trigger this action.
+    🤖 says: ‼️ The action no has permission to trigger.
   release_error: |
-    🤖 says: ‼️ this action release error, please check release of this action.
+    🤖 says: ‼️ The action release error.
+  changelog_error: |
+    🤖 says: ‼️ The action changelog error.

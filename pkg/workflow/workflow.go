@@ -18,6 +18,7 @@ package workflow
 
 import (
 	"github.com/cuisongliu/logger"
+	"github.com/labring-actions/gh-rebot/pkg/bot"
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
@@ -25,45 +26,51 @@ import (
 )
 
 type workflow struct {
-	Body string
+	Body   string
+	sender *sender
 }
 
 func (c *workflow) Release() error {
 	if checkPermission(config.GlobalsConfig.Release.AllowOps) != nil {
-		return sendMsgToIssue("permission_error")
+		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
 	if len(data) == 2 && utils.ValidateVersion(data[1]) {
 		err := gh.Tag(data[1])
 		if err != nil {
-			return sendMsgToIssue("release_error")
+			return c.sender.sendMsgToIssue("release_error")
 		}
-		return sendMsgToIssue("success")
+		action, err := gh.CheckRelease(data[1])
+		if err != nil || !action.IsSuccess {
+			return c.sender.sendMsgToIssue("release_error", action.URL)
+		}
+		if err = c.sender.sendMsgToIssue("success", action.URL); err != nil {
+			return err
+		}
+		return c.sender.sendCommentMsgToIssue(bot.GetChangelogComment())
 	} else {
 		logger.Error("command format is error: %s ex. /{prefix}_release {tag}", c.Body)
-		return sendMsgToIssue("format_error")
+		return c.sender.sendMsgToIssue("format_error")
 	}
 }
 
 func (c *workflow) Changelog() error {
 	if checkPermission(config.GlobalsConfig.Changelog.AllowOps) != nil {
-		return sendMsgToIssue("permission_error")
+		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
 	if len(data) == 1 {
-
-		return sendMsgToIssue("success")
+		err := gh.Changelog(config.GlobalsConfig.Changelog.Reviewers)
+		if err != nil {
+			return c.sender.sendMsgToIssue("changelog_error")
+		}
+		return c.sender.sendMsgToIssue("success")
 	} else {
 		logger.Error("command format is error: %s ex. /{prefix}_changelog", c.Body)
-		return sendMsgToIssue("format_error")
+		return c.sender.sendMsgToIssue("format_error")
 	}
 }
 
-func sendMsgToIssue(msgKey string) error {
-	msg := config.GlobalsConfig.GetMessage(msgKey)
-	return gh.SendMsgToIssue(msg)
-}
-
 func NewWorkflow(body string) Interface {
-	return &workflow{Body: body}
+	return &workflow{Body: body, sender: &sender{Body: body}}
 }

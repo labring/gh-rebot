@@ -19,7 +19,7 @@ package utils
 import "testing"
 
 func TestRunCommandWithOutput(t *testing.T) {
-	out, err := RunCommandWithOutput("cd /tmp/fork-sealos-repo && git fetch --tags && git tag -l", false)
+	out, err := RunCommandWithOutput("cd /tmp/fork-sealos-repo && gh run list --workflow Release --json name,number,status,url,event,conclusion -q '.[0]'", false)
 	if err != nil {
 		t.Error(err)
 		return
