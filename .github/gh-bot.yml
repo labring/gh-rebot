@@ -20,6 +20,7 @@ changelog:
     - cuisongliu
 
 release:
+  retry: 15s
   action: Release
   allowOps:
     - cuisongliu

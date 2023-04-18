@@ -23,6 +23,7 @@ import (
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/json"
+	"time"
 )
 
 type ActionOut struct {
@@ -51,7 +52,12 @@ func CheckRelease(tagName string) (*ActionOut, error) {
 		return &out, nil
 	}
 	if out.Conclusion == "" {
-		logger.Debug("workflow release is in progress, please wait")
+		tt, err := time.ParseDuration(config.GlobalsConfig.Release.Retry)
+		if err != nil {
+			tt = time.Second * 20
+		}
+		logger.Debug("workflow release is in progress, please wait %s retry", tt.String())
+		time.Sleep(tt)
 		return CheckRelease(tagName)
 	}
 	return nil, errors.New("workflow Conclusion is error")
