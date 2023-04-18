@@ -112,6 +112,7 @@ func SendCustomizeMsgToIssue(msg string) error {
 		_ = tpl.Execute(out, map[string]interface{}{
 			"IssueOrPRNumber": GlobalsGithubVar.IssueOrPRNumber,
 			"Msg":             msg,
+			"SafeRepo":        GlobalsGithubVar.SafeRepo,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
 	}
