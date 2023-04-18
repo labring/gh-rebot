@@ -13,7 +13,7 @@ repo:
   fork: cuisongliu/sealos
 
 changelog:
-  script: scripts/changelog.sh
+  script: scripts/changelog.sh {{.Repo.Fork}}
   allowOps:
     - cuisongliu
   reviewers:

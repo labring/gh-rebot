@@ -35,6 +35,16 @@ func TryParse(text string) (*template.Template, bool, error) {
 	return tmp, !isFailed, err
 }
 
+func TryParseString(text string, data any) string {
+	v, b, _ := TryParse(text)
+	if b {
+		out := bytes.NewBuffer(nil)
+		_ = v.Execute(out, data)
+		text = out.String()
+	}
+	return text
+}
+
 func ParseFiles(filenames ...string) (*template.Template, error) {
 	return defaultTpl.ParseFiles(filenames...)
 }

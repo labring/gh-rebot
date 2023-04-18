@@ -20,6 +20,7 @@ import (
 	"fmt"
 	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/config"
+	"github.com/labring-actions/gh-rebot/pkg/template"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"k8s.io/client-go/util/retry"
 	"strings"
@@ -81,9 +82,10 @@ func Changelog(reviews []string) error {
 	if err := setPreGithub(); err != nil {
 		return err
 	}
+
 	shells := []any{
 		fmt.Sprintf(newBranch, branchName),
-		fmt.Sprintf(generateChangelog, config.GlobalsConfig.GetChangelogScript()),
+		fmt.Sprintf(generateChangelog, template.TryParseString(config.GlobalsConfig.GetChangelogScript(), config.GlobalsConfig)),
 	}
 	if err := execFn(shells); err != nil {
 		return err

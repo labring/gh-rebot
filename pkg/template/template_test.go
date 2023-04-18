@@ -17,12 +17,13 @@ package template
 import (
 	"bytes"
 	"fmt"
+	"github.com/labring-actions/gh-rebot/pkg/config"
 	"testing"
 )
 
 func TestTemplateSemverCompare(t *testing.T) {
 	v, b, e := TryParse(`
-version: {{if (semverCompare "^1.26.0" (default "" .ENV)) }}v1{{ else }}v1alpha2{{ end }}
+scripts/changelog.sh {{.Repo.Fork}}
 `)
 	if e != nil {
 		t.Errorf("parse err: %v", e)
@@ -30,14 +31,10 @@ version: {{if (semverCompare "^1.26.0" (default "" .ENV)) }}v1{{ else }}v1alpha2
 	if !b {
 		t.Errorf("parse failed: %v", b)
 	}
-
+	config.GlobalsConfig = new(config.Config)
+	config.GlobalsConfig.Repo.Fork = "cuisongliu/sealos"
 	out := bytes.NewBuffer(nil)
-	execErr := v.Execute(out, map[string]interface{}{
-		// comment out this to test true return
-		// "ENV": "v1.26.1",
-		// comment out this to test false return
-		"ENV": "v1.25.10",
-	})
+	execErr := v.Execute(out, config.GlobalsConfig)
 	if execErr != nil {
 		t.Errorf("template exec err: %v", execErr)
 	}
