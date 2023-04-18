@@ -20,24 +20,33 @@ import (
 	"fmt"
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"k8s.io/client-go/util/retry"
 	"strings"
 )
 
-var execFn = func(shells []string) error {
+type RetryShell string
+
+var execFn = func(shells []any) error {
 	for _, sh := range shells {
-		if err := utils.RunCommand("bash", "-c", sh); err != nil {
-			return err
+		if s, ok := sh.(string); ok {
+			if err := utils.RunCommand("bash", "-c", s); err != nil {
+				return err
+			}
+		} else if s, ok := sh.(RetryShell); ok {
+			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				return utils.RunCommand("bash", "-c", string(s))
+			})
 		}
 	}
 	return nil
 }
 
-func setPreGithub(postHooks ...string) error {
-	shells := []string{
+func setPreGithub(postHooks ...any) error {
+	shells := []any{
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
-		fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName()),
+		RetryShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName())),
 		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
 		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
 	}
@@ -53,7 +62,7 @@ func setPreGithub(postHooks ...string) error {
 		}
 	}
 
-	finalShell := []string{
+	finalShell := []any{
 		fmt.Sprintf(syncRepo),
 	}
 	if err := execFn(finalShell); err != nil {
@@ -68,7 +77,7 @@ func Changelog(reviews []string) error {
 	if err := setPreGithub(); err != nil {
 		return err
 	}
-	shells := []string{
+	shells := []any{
 		fmt.Sprintf(newBranch, branchName),
 		fmt.Sprintf(generateChangelog, config.GlobalsConfig.GetChangelogScript()),
 	}
@@ -79,7 +88,7 @@ func Changelog(reviews []string) error {
 		return err
 	} else {
 		if ok {
-			afterShell := []string{fmt.Sprintf(gitPush, branchName), fmt.Sprintf(gitPR, release, strings.Join(reviews, ","))}
+			afterShell := []any{fmt.Sprintf(gitPush, branchName), fmt.Sprintf(gitPR, release, strings.Join(reviews, ","))}
 			if err = execFn(afterShell); err != nil {
 				return err
 			}
