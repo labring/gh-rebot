@@ -62,7 +62,7 @@ func setPreGithub() error {
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
-		RetrySecretShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())),
+		RetryShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName())),
 		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
 		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
 		SecretShell(fmt.Sprintf(setToken, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())),
