@@ -26,6 +26,8 @@ import (
 )
 
 type RetryShell string
+type RetrySecretShell string
+type SecretShell string
 
 var execFn = func(shells []any) error {
 	for _, sh := range shells {
@@ -34,6 +36,16 @@ var execFn = func(shells []any) error {
 			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
 				return utils.RunCommand("bash", "-c", string(s))
 			})
+		}
+		if s, ok := sh.(RetrySecretShell); ok {
+			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				return utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken())
+			})
+		}
+		if s, ok := sh.(SecretShell); ok {
+			if err := utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken()); err != nil {
+				return err
+			}
 		}
 		if s, ok := sh.(string); ok {
 			logger.Debug("once shell: %s", s)
@@ -50,26 +62,15 @@ func setPreGithub(postHooks ...any) error {
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
-		RetryShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName())),
+		RetrySecretShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())),
 		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
 		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
+		SecretShell(fmt.Sprintf(setToken, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())),
+		SecretShell(fmt.Sprintf(gitAddRemote, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetForkName())),
+		fmt.Sprintf(syncRepo),
 	}
 	shells = append(shells, postHooks...)
 	if err := execFn(shells); err != nil {
-		return err
-	}
-	setTokenShell := fmt.Sprintf(setToken, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())
-	setRemoteShell := fmt.Sprintf(gitAddRemote, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetForkName())
-	for _, sh := range []string{setTokenShell, setRemoteShell} {
-		if err := utils.RunCommandInSecret(sh, config.GlobalsConfig.GetToken()); err != nil {
-			return err
-		}
-	}
-
-	finalShell := []any{
-		fmt.Sprintf(syncRepo),
-	}
-	if err := execFn(finalShell); err != nil {
 		return err
 	}
 	return nil
