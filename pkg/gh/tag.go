@@ -28,7 +28,7 @@ func Tag(tag string) error {
 		return err
 	} else {
 		if !ok {
-			shells := []string{
+			shells := []any{
 				fmt.Sprintf(gitNewTag, tag),
 				fmt.Sprintf(gitPushRemote, tag),
 			}
