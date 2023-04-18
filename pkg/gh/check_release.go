@@ -23,6 +23,7 @@ import (
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/json"
+	"strings"
 	"time"
 )
 
@@ -35,12 +36,13 @@ type ActionOut struct {
 }
 
 func CheckRelease(tagName string) (*ActionOut, error) {
-	workflowOutput, err := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, config.GlobalsConfig.Release.Action, tagName), true)
-	if err != nil {
-		return nil, err
+	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, config.GlobalsConfig.Release.Action, tagName), true)
+	if workflowOutput == "" || strings.Contains(workflowOutput, "could not find any workflows named") {
+		time.Sleep(5 * time.Second)
+		return CheckRelease(tagName)
 	}
 	var out ActionOut
-	if err = json.Unmarshal([]byte(workflowOutput), &out); err != nil {
+	if err := json.Unmarshal([]byte(workflowOutput), &out); err != nil {
 		return nil, err
 	}
 	if out.Conclusion == "success" && out.Status == "completed" {
