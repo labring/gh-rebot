@@ -57,7 +57,7 @@ var execFn = func(shells []any) error {
 	return nil
 }
 
-func setPreGithub(postHooks ...any) error {
+func setPreGithub() error {
 	shells := []any{
 		authStatus,
 		disablePrompt,
@@ -69,7 +69,6 @@ func setPreGithub(postHooks ...any) error {
 		SecretShell(fmt.Sprintf(gitAddRemote, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetForkName())),
 		fmt.Sprintf(syncRepo),
 	}
-	shells = append(shells, postHooks...)
 	if err := execFn(shells); err != nil {
 		return err
 	}
