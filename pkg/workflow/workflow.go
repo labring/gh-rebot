@@ -41,7 +41,10 @@ func (c *workflow) Release() error {
 			return c.sender.sendMsgToIssue("release_error")
 		}
 		action, err := gh.CheckRelease(data[1])
-		if err != nil || !action.IsSuccess {
+		if err != nil {
+			return err
+		}
+		if !action.IsSuccess {
 			return c.sender.sendMsgToIssue("release_error", action.URL)
 		}
 		if err = c.sender.sendMsgToIssue("success", action.URL); err != nil {
