@@ -37,5 +37,5 @@ const (
 	gitNewTag         = "cd /tmp/fork-sealos-repo && git tag %s"
 	gitAddRemote      = "cd /tmp/fork-sealos-repo && git remote add fork https://%s:%s@github.com/%s.git"
 	gitPushRemote     = "cd /tmp/fork-sealos-repo && git push -f fork %s"
-	gitWorkflowCheck  = "cd /tmp/fork-sealos-repo && gh run list -w %s -b %s --json name,status,url,conclusion -q '.[0]'"
+	gitWorkflowCheck  = "cd /tmp/fork-sealos-repo && gh run list --repo %s -w %s -b %s --json name,status,url,conclusion -q '.[0]'"
 )

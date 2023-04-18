@@ -36,7 +36,7 @@ type ActionOut struct {
 }
 
 func CheckRelease(tagName string) (*ActionOut, error) {
-	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, config.GlobalsConfig.Release.Action, tagName), true)
+	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, config.GlobalsConfig.GetForkName(), config.GlobalsConfig.Release.Action, tagName), true)
 	if workflowOutput == "" || strings.Contains(workflowOutput, "could not find any workflows named") {
 		time.Sleep(5 * time.Second)
 		return CheckRelease(tagName)
