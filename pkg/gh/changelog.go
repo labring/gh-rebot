@@ -37,7 +37,6 @@ func setPreGithub(postHooks ...string) error {
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
-		fmt.Sprintf(syncRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName()),
 		fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName()),
 		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
 		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
@@ -52,6 +51,13 @@ func setPreGithub(postHooks ...string) error {
 		if err := utils.RunCommandInSecret(sh, config.GlobalsConfig.GetToken()); err != nil {
 			return err
 		}
+	}
+
+	finalShell := []string{
+		fmt.Sprintf(syncRepo),
+	}
+	if err := execFn(finalShell); err != nil {
+		return err
 	}
 	return nil
 }

@@ -22,7 +22,7 @@ const (
 	configEmail       = "cd /tmp/fork-sealos-repo && git config user.email %s"
 	configUser        = "cd /tmp/fork-sealos-repo && git config user.name %s"
 	forkRepo          = "gh repo view %s >/dev/null 2>&1 || (echo '仓库不存在，正在fork仓库...' && gh repo fork %s %s)"
-	syncRepo          = "gh repo sync %s --source %s"
+	syncRepo          = "cd /tmp/fork-sealos-repo && git fetch fork && git rebase fork/main && git push -f origin main"
 	cloneRepo         = "rm -rf /tmp/fork-sealos-repo && gh repo clone %s /tmp/fork-sealos-repo"
 	setToken          = "cd /tmp/fork-sealos-repo && git remote set-url origin https://%s:%s@github.com/%s.git"
 	newBranch         = "cd /tmp/fork-sealos-repo && git checkout -b %s"
