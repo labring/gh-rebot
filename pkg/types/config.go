@@ -60,7 +60,7 @@ type Config struct {
 // GetPrefix returns the prefix for the bot
 func (r *Config) GetPrefix() string {
 	if r.Bot.Prefix == "" {
-		return "/github"
+		return "/"
 	}
 	return r.Bot.Prefix
 }

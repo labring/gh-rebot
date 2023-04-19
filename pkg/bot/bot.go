@@ -22,9 +22,15 @@ import (
 )
 
 func GetReleaseComment() string {
+	if types.GlobalsBotConfig.GetPrefix() == "/" {
+		return "/release"
+	}
 	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "release"}, types.GlobalsBotConfig.GetSpe())
 }
 
 func GetChangelogComment() string {
+	if types.GlobalsBotConfig.GetPrefix() == "/" {
+		return "/changelog"
+	}
 	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "changelog"}, types.GlobalsBotConfig.GetSpe())
 }

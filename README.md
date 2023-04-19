@@ -57,7 +57,7 @@ message:
 - `debug` - 是否开启调试模式，设置为 true 时开启。
 - `bot` \- 机器人配置。
    - `copilot4prs` - 是否为 PR 启用 copilot 功能。
-   - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/github`
+   - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/`,如果设置为`/` 则 `spe` 失效。命令为`/release`
    - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
    - `allowOps` - 允许操作的用户名列表。
    - `email` - 机器人邮箱。
