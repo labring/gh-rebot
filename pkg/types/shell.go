@@ -30,7 +30,7 @@ func ExecShellForAny(secrets ...string) func(shells []any) error {
 	return func(shells []any) error {
 		// 设置重试策略
 		exponentialBackoff := backoff.NewExponentialBackOff()
-		exponentialBackoff.MaxElapsedTime = 30 * time.Second
+		exponentialBackoff.MaxElapsedTime = 15 * time.Second
 		for _, sh := range shells {
 			if s, ok := sh.(RetryShell); ok {
 				if err := backoff.Retry(func() error {
