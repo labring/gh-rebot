@@ -18,7 +18,6 @@ package gh
 
 import (
 	"fmt"
-	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/template"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
@@ -33,7 +32,6 @@ type SecretShell string
 var execFn = func(shells []any) error {
 	for _, sh := range shells {
 		if s, ok := sh.(RetryShell); ok {
-			logger.Debug("retry shell: %s", s)
 			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
 				return utils.RunCommand("bash", "-c", string(s))
 			})
@@ -49,7 +47,6 @@ var execFn = func(shells []any) error {
 			}
 		}
 		if s, ok := sh.(string); ok {
-			logger.Debug("once shell: %s", s)
 			if err := utils.RunCommand("bash", "-c", s); err != nil {
 				return err
 			}
@@ -63,6 +60,7 @@ func setPreGithub() error {
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
+		RetryShell(fmt.Sprintf(checkRepo, config.GlobalsConfig.GetRepoName())),
 		RetryShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName())),
 		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
 		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
