@@ -18,9 +18,10 @@ package workflow
 
 import (
 	"bytes"
-	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/template"
 	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/pkg/errors"
 )
 
 type sender struct {
@@ -37,9 +38,41 @@ func (s *sender) sendMsgToIssue(msgKey string, actionURL ...string) error {
 		})
 		msg = out.String()
 	}
-	return gh.SendMsgToIssue(msg, actionURL...)
+	return SendMsgToIssue(msg, actionURL...)
 }
 
 func (s *sender) sendCommentMsgToIssue(msg string) error {
-	return gh.SendCustomizeMsgToIssue(msg)
+	return SendCustomizeMsgToIssue(msg)
+}
+
+func SendMsgToIssue(msg string, actionURL ...string) error {
+	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}} <br/>See: <br/>- {{.GetRunnerURL}}{{range .ActionURLs}}<br/>- {{.}}{{end}}" --repo {{.SafeRepo}}`)
+	if ok {
+		out := bytes.NewBuffer(nil)
+		_ = tpl.Execute(out, map[string]interface{}{
+			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
+			"Msg":             msg,
+			"GetRunnerURL":    types.GlobalsGithubVar.GetRunnerURL(),
+			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
+			"ActionURLs":      actionURL,
+		})
+		return utils.RunCommand("bash", "-c", out.String())
+	}
+
+	return errors.New("template parse error")
+}
+
+func SendCustomizeMsgToIssue(msg string) error {
+	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}}" --repo {{.SafeRepo}}`)
+	if ok {
+		out := bytes.NewBuffer(nil)
+		_ = tpl.Execute(out, map[string]interface{}{
+			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
+			"Msg":             msg,
+			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
+		})
+		return utils.RunCommand("bash", "-c", out.String())
+	}
+
+	return errors.New("template parse error")
 }
