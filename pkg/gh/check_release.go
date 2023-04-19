@@ -21,7 +21,6 @@ import (
 	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
-	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/json"
 	"strings"
 	"time"
@@ -45,15 +44,14 @@ func CheckRelease(tagName string) (*ActionOut, error) {
 	if err := json.Unmarshal([]byte(workflowOutput), &out); err != nil {
 		return nil, err
 	}
-	if out.Conclusion == "success" && out.Status == "completed" {
-		out.IsSuccess = true
-		return &out, nil
-	}
-	if out.Conclusion == "failure" {
+	if out.Status == "completed" {
+		if out.Conclusion == "success" {
+			out.IsSuccess = true
+			return &out, nil
+		}
 		out.IsSuccess = false
 		return &out, nil
-	}
-	if out.Conclusion == "" {
+	} else {
 		tt, err := time.ParseDuration(types.GlobalsBotConfig.Release.Retry)
 		if err != nil {
 			tt = time.Second * 20
@@ -62,5 +60,4 @@ func CheckRelease(tagName string) (*ActionOut, error) {
 		time.Sleep(tt)
 		return CheckRelease(tagName)
 	}
-	return nil, errors.New("workflow Conclusion is error")
 }
