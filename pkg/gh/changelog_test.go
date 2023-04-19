@@ -19,17 +19,8 @@ package gh
 import "testing"
 
 func Test_generateBranchName(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		{
-			name: "default",
-		},
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			got := generateBranchName()
-			t.Logf("generateBranchName() = %v", got)
-		})
+	err := execFn([]any{RetryShell("gh repo view cuisongliu/sealos --json isFork,url,name  -q '.'")})
+	if err != nil {
+		t.Errorf("err:%v", err)
 	}
 }

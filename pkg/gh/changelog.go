@@ -18,6 +18,7 @@ package gh
 
 import (
 	"fmt"
+	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/template"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
@@ -69,6 +70,7 @@ func setPreGithub() error {
 		fmt.Sprintf(syncRepo),
 	}
 	if err := execFn(shells); err != nil {
+		logger.Error("setPreGithub err:%v", err)
 		return err
 	}
 	return nil
