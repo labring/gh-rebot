@@ -22,6 +22,7 @@ var (
 
 type Bot struct {
 	Prefix   string   `json:"prefix"`
+	Spe      string   `json:"spe"`
 	AllowOps []string `json:"allowOps"`
 	Email    string   `json:"email"`
 	Username string   `json:"username"`
@@ -61,9 +62,17 @@ type Config struct {
 // GetPrefix returns the prefix for the bot
 func (r *Config) GetPrefix() string {
 	if r.Bot.Prefix == "" {
-		return "/gh_bot"
+		return "/github"
 	}
 	return r.Bot.Prefix
+}
+
+// GetSpe returns the spe for the bot
+func (r *Config) GetSpe() string {
+	if r.Bot.Spe == "" {
+		return "_"
+	}
+	return r.Bot.Spe
 }
 
 // GetBotAllowOps returns the triggers for the bot

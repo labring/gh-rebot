@@ -1,59 +1,20 @@
-## gh-rebot 使用说明文档
+# gh-rebot 项目说明文档
 
-gh-rebot 是一个用 Go 语言编写的命令行工具，用于自动化 GitHub 操作。本文档将介绍如何安装和使用 gh-rebot。
+gh-rebot 是一个针对 sealos 项目的 GitHub rebot，用于自动执行一些常见操作，如生成变更日志、发布新版本等。本文档将介绍该 rebot 的配置文件，并提供相应的使用指南。
 
-### 安装
+## 配置文件
 
-从 GitHub Actions 工作流中下载已编译的二进制文件。文件将保存在 dist/gh-rebot_linux_amd64_v1/gh-rebot 目录下。将其移动到适当的位置并设置可执行权限。
-
-### 使用
-
-gh-rebot 支持以下子命令：
-
-1. version
-
-```shell
-gh-rebot version
-```
-
-2. changelog
-
-
-```shell
-gh-rebot changelog --reviews cuisongliu
-```
-
-3. comment
-
-```shell
-gh-rebot comment "${{github.event.comment.body}}"  ${{ github.event.issue.number }} ${{ github.repository_owner }}/gh-rebot
-```
-
-- GH_TOKEN：这是一个 GitHub Personal Access Token（个人访问令牌），用于对 GitHub API 进行身份验证。通常，它存储在仓库的 Secrets 中以保护敏感信息。在此例中，"${{ secrets.GH_PAT }}" 表示从仓库的 Secrets 中获取名为 GH_PAT 的变量值。
-- SEALOS_SYS_TRIGGERS：这是一个字符串，其中包含以逗号分隔的 GitHub 用户名列表。这些用户名代表了允许触发 GitHub Actions 工作流的用户。在此例中，"sfggg" 是一个示例用户名，您需要用实际允许触发工作流的用户列表替换它。
-
-
-1. **version**：表示配置文件的版本。在本例中，版本为 `v1`。
-2. **debug**：布尔值（`true` 或 `false`），表示是否开启调试模式。在调试模式下，工具可能会输出更多的日志信息以帮助诊断问题。本例中，调试模式已开启。
-3. **bot**：这部分包含与 GitHub 机器人相关的配置。
-    - **allowOps**：字符串，包含允许操作此 GitHub 机器人的 GitHub 用户名。在本例中，只有 `cuisongliu` 用户允许操作此机器人。
-    - **email**：字符串，表示机器人的电子邮件地址。本例中，电子邮件地址为 `sealos-ci-robot@sealos.io`。
-    - **username**：字符串，表示机器人的 GitHub 用户名。本例中，用户名为 `sealos-ci-robot`。
-4. **repo**：这部分包含与仓库相关的配置。
-    - **org**：布尔值（`true` 或 `false`），表示仓库是否属于一个组织。本例中，仓库属于组织，值为 `true`。
-    - **name**：字符串，表示主仓库的名称。在本例中，主仓库为 `labring-actions/sealos`。
-    - **fork**：字符串，表示分支仓库的名称。在本例中，分支仓库为 `cuisongliu/sealos`。
-
-### 示例
-
-首先，创建名为 `.github/gh-bot.yml` 或 `.github/gh-bot.yaml` 的配置文件，并将以下内容粘贴到其中：
+下面是 gh-rebot 项目的配置文件：
 
 ```yaml
 version: v1
 debug: true
 bot:
+  prefix: /sealos
+  spe: _
   allowOps:
-  - cuisongliu
+    - sealos-ci-robot
+    - sealos-release-robot
   email: sealos-ci-robot@sealos.io
   username: sealos-ci-robot
 repo:
@@ -61,36 +22,95 @@ repo:
   name: labring-actions/sealos
   fork: cuisongliu/sealos
 
-```
+changelog:
+  script: scripts/changelog.sh
+  allowOps:
+    - cuisongliu
+  reviewers:
+    - cuisongliu
 
-接下来，创建一个 GitHub Action 工作流文件。在您的项目仓库的 `.github/workflows` 目录中，创建一个名为 `gh_bot_action.yml` 的文件，并将以下内容粘贴到其中：
+release:
+  retry: 15s
+  action: Release
+  allowOps:
+    - cuisongliu
 
-```yaml
-name: Release Changelog
-on:
-   push:
-      branches-ignore:
-         - '**'
-      tags:
-         - '*'
-env:
-  # Common versions
-  GH_TOKEN: "${{ secrets.GH_PAT }}"
-  SEALOS_SYS_TRIGGER: "${{ github.event.sender.login }}"
-jobs:
-  test:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout
-        uses: actions/checkout@master
-      - name: Download gh-rebot
-        run: |
-          ##wget gh-rebot
-
-      - name: Test sub cmd
-        run: |
-          gh-rebot changelog
-
+message:
+  success: |
+    🤖 says: The action {{.Body}} finished successfully 🎉
+  format_error: |
+    🤖 says: ‼️ The action format error, please check the format of this action.
+  permission_error: |
+    🤖 says: ‼️ The action no has permission to trigger.
+  release_error: |
+    🤖 says: ‼️ The action release error.
+  changelog_error: |
+    🤖 says: ‼️ The action changelog error.
 
 ```
 
+### 配置文件详解
+
+- `version` - 版本标识，当前为 v1。
+- `debug` - 是否开启调试模式，设置为 true 时开启。
+- `bot` \- 机器人配置。
+   - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/github`
+   - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
+   - `allowOps` - 允许操作的用户名列表。
+   - `email` - 机器人邮箱。
+   - `username` - 机器人用户名。
+- `repo` \- 仓库配置。
+   - `org` - 是否为组织仓库，设置为 true 时表示是组织仓库。
+   - `name` - 仓库名称。
+   - `fork` - fork 的仓库名称。
+- `changelog` \- 变更日志配置。
+   - `script` - 生成变更日志的脚本。默认值 `scripts/changelog.sh`,可使用模板渲染。
+   - `allowOps` - 允许触发变更日志操作的用户名列表。
+   - `reviewers` - 审核者列表。
+- `release` \- 发布配置。
+   - `retry` - 重试间隔，例如：15s。
+   - `action` - 执行动作，例如：Release。
+   - `allowOps` - 允许触发发布操作的用户名列表。
+- `message` \- 消息配置。
+   - `success` - 成功消息模板。
+   - `format_error` - 格式错误消息模板。
+   - `permission_error` - 权限错误消息模板。
+   - `release_error` - 发布错误消息模板。
+   - `changelog_error` - 变更日志错误消息模板。
+
+## 使用文档
+
+使用 gh-rebot 时，需要遵循以下步骤：
+
+1. 将配置文件添加到项目的`.github`目录` gh-bot.yml `文件。
+2. 确保配置文件中的用户名、仓库名称等信息与实际情况相符。
+3. 根据配置文件中的命令前缀（如本例中的 `/sealos`）在 GitHub 仓库的 issue 或 PR 中发表评论，以触发相应的操作。
+
+### 变更日志操作
+
+如果需要生成变更日志，请在 issue 或 PR 中使用以下命令：
+
+```bash
+/sealos_changelog
+```
+
+此命令会触发配置文件中定义的脚本（如本例中的 `scripts/changelog.sh`）来生成变更日志。需要注意的是，只有在 `changelog` 配置节中的 `allowOps` 列表中的用户才有权限触发此操作。
+
+### 发布操作
+
+如果需要发布新版本，请在 issue 或 PR 中使用以下命令：
+
+```
+/sealos_release
+```
+
+### 错误处理
+
+根据配置文件中的消息模板，gh-rebot 会在执行操作过程中遇到错误时返回相应的提示消息。例如：
+
+- 格式错误：‼️ 机器人说：操作格式错误，请检查此操作的格式。
+- 权限错误：‼️ 机器人说：操作无权限触发。
+- 发布错误：‼️ 机器人说：操作发布错误。
+- 变更日志错误：‼️ 机器人说：操作变更日志错误。
+
+在遇到错误时，请根据提示信息进行相应的调整。

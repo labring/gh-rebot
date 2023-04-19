@@ -2,6 +2,7 @@ version: v1
 debug: true
 bot:
   prefix: /sealos
+  spe: _
   allowOps:
     - sealos-ci-robot
     - sealos-release-robot

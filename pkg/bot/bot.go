@@ -22,9 +22,9 @@ import (
 )
 
 func GetReleaseComment() string {
-	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "release"}, "_")
+	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "release"}, config.GlobalsConfig.GetSpe())
 }
 
 func GetChangelogComment() string {
-	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "changelog"}, "_")
+	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "changelog"}, config.GlobalsConfig.GetSpe())
 }
