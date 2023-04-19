@@ -33,14 +33,18 @@ type SecretShell string
 var execFn = func(shells []any) error {
 	for _, sh := range shells {
 		if s, ok := sh.(RetryShell); ok {
-			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
+			if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
 				return utils.RunCommand("bash", "-c", string(s))
-			})
+			}); err != nil {
+				return err
+			}
 		}
 		if s, ok := sh.(RetrySecretShell); ok {
-			return retry.RetryOnConflict(retry.DefaultRetry, func() error {
+			if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
 				return utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken())
-			})
+			}); err != nil {
+				return err
+			}
 		}
 		if s, ok := sh.(SecretShell); ok {
 			if err := utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken()); err != nil {
