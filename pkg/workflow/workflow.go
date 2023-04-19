@@ -19,8 +19,8 @@ package workflow
 import (
 	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/bot"
-	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"strings"
 )
@@ -31,7 +31,7 @@ type workflow struct {
 }
 
 func (c *workflow) Release() error {
-	if checkPermission(config.GlobalsConfig.Release.AllowOps) != nil {
+	if checkPermission(types.GlobalsBotConfig.Release.AllowOps) != nil {
 		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
@@ -58,12 +58,12 @@ func (c *workflow) Release() error {
 }
 
 func (c *workflow) Changelog() error {
-	if checkPermission(config.GlobalsConfig.Changelog.AllowOps) != nil {
+	if checkPermission(types.GlobalsBotConfig.Changelog.AllowOps) != nil {
 		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
 	if len(data) == 1 {
-		err := gh.Changelog(config.GlobalsConfig.Changelog.Reviewers)
+		err := gh.Changelog(types.GlobalsBotConfig.Changelog.Reviewers)
 		if err != nil {
 			return c.sender.sendMsgToIssue("changelog_error")
 		}

@@ -16,12 +16,15 @@ limitations under the License.
 
 package gh
 
-import "testing"
+import (
+	"github.com/labring-actions/gh-rebot/pkg/types"
+	"testing"
+)
 
 func Test_checkRemoteTagExists(t *testing.T) {
-	GlobalsGithubVar = new(GithubVar)
-	GlobalsGithubVar.IssueOrPRNumber = 1
-	GlobalsGithubVar.SafeRepo = "cuisongliu/sealos"
-	GlobalsGithubVar.RunnerID = "12345445"
+	types.GlobalsGithubVar = new(types.GithubVar)
+	types.GlobalsGithubVar.IssueOrPRNumber = 1
+	types.GlobalsGithubVar.SafeRepo = "cuisongliu/sealos"
+	types.GlobalsGithubVar.RunnerID = "12345445"
 	SendMsgToIssue("default", "https://baidu.com", "https://sealos.io")
 }

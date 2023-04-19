@@ -17,14 +17,14 @@ limitations under the License.
 package bot
 
 import (
-	"github.com/labring-actions/gh-rebot/pkg/config"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"strings"
 )
 
 func GetReleaseComment() string {
-	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "release"}, config.GlobalsConfig.GetSpe())
+	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "release"}, types.GlobalsBotConfig.GetSpe())
 }
 
 func GetChangelogComment() string {
-	return strings.Join([]string{config.GlobalsConfig.GetPrefix(), "changelog"}, config.GlobalsConfig.GetSpe())
+	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "changelog"}, types.GlobalsBotConfig.GetSpe())
 }

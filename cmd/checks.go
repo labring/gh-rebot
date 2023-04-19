@@ -19,16 +19,16 @@ package cmd
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/gh"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 )
 
 func preCheck() error {
 	var err error
-	gh.GlobalsGithubVar, err = gh.GetGHEnvToVar()
+	types.GlobalsGithubVar, err = types.GetGHEnvToVar()
 	if err != nil {
 		return err
 	}
-	logger.Debug("github env to var: %v", gh.GlobalsGithubVar)
+	logger.Debug("github env to var: %v", types.GlobalsGithubVar)
 	if err = checkGithubEnv(); err != nil {
 		return err
 	}
@@ -36,16 +36,16 @@ func preCheck() error {
 }
 
 func checkGithubEnv() error {
-	if gh.GlobalsGithubVar.RunnerID == "" {
+	if types.GlobalsGithubVar.RunnerID == "" {
 		return fmt.Errorf("error: GITHUB_RUN_ID is not set. Please set the GITHUB_RUN_ID environment variable")
 	}
-	if gh.GlobalsGithubVar.SafeRepo == "" {
+	if types.GlobalsGithubVar.SafeRepo == "" {
 		return fmt.Errorf("error: not found repository.full_name in github event")
 	}
-	if gh.GlobalsGithubVar.CommentBody == "" {
+	if types.GlobalsGithubVar.CommentBody == "" {
 		return fmt.Errorf("error: not found comment.body in github event")
 	}
-	if gh.GlobalsGithubVar.IssueOrPRNumber == 0 {
+	if types.GlobalsGithubVar.IssueOrPRNumber == 0 {
 		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")
 	}
 	return nil

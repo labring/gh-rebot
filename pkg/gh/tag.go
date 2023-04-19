@@ -18,6 +18,7 @@ package gh
 
 import (
 	"fmt"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 )
 
 func Tag(tag string) error {
@@ -32,7 +33,7 @@ func Tag(tag string) error {
 				fmt.Sprintf(gitNewTag, tag),
 				fmt.Sprintf(gitPushRemote, tag),
 			}
-			if err = execFn(shells); err != nil {
+			if err = types.ExecShellForAny()(shells); err != nil {
 				return err
 			}
 		}

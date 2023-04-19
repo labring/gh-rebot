@@ -14,13 +14,9 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package gh
+package types
 
-import "testing"
-
-func Test_generateBranchName(t *testing.T) {
-	err := ExecShellForAny([]any{RetryShell("gh repo view cuisongliu/sealos --json isFork,url,name  -q '.'")})
-	if err != nil {
-		t.Errorf("err:%v", err)
-	}
-}
+var (
+	GlobalsBotConfig *Config
+	GlobalsGithubVar *GithubVar
+)

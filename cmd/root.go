@@ -19,7 +19,7 @@ package cmd
 import (
 	"errors"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/config"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -51,7 +51,7 @@ func init() {
 
 func onBootOnDie() {
 	var err error
-	config.GlobalsConfig, err = config.LoadConfig(cfgFile)
+	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
 	if err != nil {
 		logger.Error(err)
 		os.Exit(1)
@@ -60,7 +60,7 @@ func onBootOnDie() {
 		logger.Error(err)
 		os.Exit(1)
 	}
-	logger.Cfg(config.GlobalsConfig.GetDebug(), false)
+	logger.Cfg(types.GlobalsBotConfig.GetDebug(), false)
 }
 
 func checkGhToken() error {

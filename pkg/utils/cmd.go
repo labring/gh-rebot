@@ -38,8 +38,11 @@ func RunCommand(command string, args ...string) error {
 	return nil
 }
 
-func RunCommandInSecret(command string, secret string) error {
-	disPlayCommand := strings.ReplaceAll(command, secret, "******")
+func RunCommandInSecret(command string, secrets []string) error {
+	var disPlayCommand string
+	for _, secret := range secrets {
+		disPlayCommand = strings.ReplaceAll(command, secret, "******")
+	}
 	logger.Debug("Running command: %s", disPlayCommand)
 	cmd := exec.Command("/bin/bash", "-c", command)
 	cmd.Stdin = os.Stdin

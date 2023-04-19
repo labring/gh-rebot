@@ -17,7 +17,7 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"github.com/labring-actions/gh-rebot/pkg/config"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"testing"
 )
 
@@ -31,10 +31,10 @@ scripts/changelog.sh {{.Repo.Fork}}
 	if !b {
 		t.Errorf("parse failed: %v", b)
 	}
-	config.GlobalsConfig = new(config.Config)
-	config.GlobalsConfig.Repo.Fork = "cuisongliu/sealos"
+	types.GlobalsBotConfig = new(types.Config)
+	types.GlobalsBotConfig.Repo.Fork = "cuisongliu/sealos"
 	out := bytes.NewBuffer(nil)
-	execErr := v.Execute(out, config.GlobalsConfig)
+	execErr := v.Execute(out, types.GlobalsBotConfig)
 	if execErr != nil {
 		t.Errorf("template exec err: %v", execErr)
 	}

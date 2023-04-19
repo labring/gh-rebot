@@ -20,6 +20,7 @@ import (
 	"bytes"
 	"fmt"
 	"github.com/labring-actions/gh-rebot/pkg/template"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 	"math/rand"
@@ -93,10 +94,10 @@ func SendMsgToIssue(msg string, actionURL ...string) error {
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
-			"IssueOrPRNumber": GlobalsGithubVar.IssueOrPRNumber,
+			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
 			"Msg":             msg,
-			"GetRunnerURL":    GlobalsGithubVar.GetRunnerURL(),
-			"SafeRepo":        GlobalsGithubVar.SafeRepo,
+			"GetRunnerURL":    types.GlobalsGithubVar.GetRunnerURL(),
+			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
 			"ActionURLs":      actionURL,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
@@ -110,9 +111,9 @@ func SendCustomizeMsgToIssue(msg string) error {
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
-			"IssueOrPRNumber": GlobalsGithubVar.IssueOrPRNumber,
+			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
 			"Msg":             msg,
-			"SafeRepo":        GlobalsGithubVar.SafeRepo,
+			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
 	}

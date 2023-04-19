@@ -19,7 +19,7 @@ package gh
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/config"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -36,7 +36,7 @@ type ActionOut struct {
 }
 
 func CheckRelease(tagName string) (*ActionOut, error) {
-	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, config.GlobalsConfig.GetForkName(), config.GlobalsConfig.Release.Action, tagName), true)
+	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.Release.Action, tagName), true)
 	if workflowOutput == "" || strings.Contains(workflowOutput, "could not find any workflows named") {
 		time.Sleep(5 * time.Second)
 		return CheckRelease(tagName)
@@ -54,7 +54,7 @@ func CheckRelease(tagName string) (*ActionOut, error) {
 		return &out, nil
 	}
 	if out.Conclusion == "" {
-		tt, err := time.ParseDuration(config.GlobalsConfig.Release.Retry)
+		tt, err := time.ParseDuration(types.GlobalsBotConfig.Release.Retry)
 		if err != nil {
 			tt = time.Second * 20
 		}

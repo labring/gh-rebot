@@ -17,18 +17,17 @@ limitations under the License.
 package workflow
 
 import (
-	"github.com/labring-actions/gh-rebot/pkg/config"
-	"github.com/labring-actions/gh-rebot/pkg/gh"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 )
 
 func checkPermission(extras []string) error {
-	tigger := gh.GlobalsGithubVar.SenderOrCommentUser
+	tigger := types.GlobalsGithubVar.SenderOrCommentUser
 	if tigger == "" {
 		return errors.New("Error: github sender or workflow is empty.")
 	}
-	ops := config.GlobalsConfig.GetBotAllowOps()
+	ops := types.GlobalsBotConfig.GetBotAllowOps()
 	ops = append(ops, extras...)
 
 	if len(ops) == 0 {

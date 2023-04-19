@@ -19,61 +19,25 @@ package gh
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/template"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
-	"k8s.io/client-go/util/retry"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"strings"
 )
-
-type RetryShell string
-type RetrySecretShell string
-type SecretShell string
-
-var execFn = func(shells []any) error {
-	for _, sh := range shells {
-		if s, ok := sh.(RetryShell); ok {
-			if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-				return utils.RunCommand("bash", "-c", string(s))
-			}); err != nil {
-				return err
-			}
-		}
-		if s, ok := sh.(RetrySecretShell); ok {
-			if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
-				return utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken())
-			}); err != nil {
-				return err
-			}
-		}
-		if s, ok := sh.(SecretShell); ok {
-			if err := utils.RunCommandInSecret(string(s), config.GlobalsConfig.GetToken()); err != nil {
-				return err
-			}
-		}
-		if s, ok := sh.(string); ok {
-			if err := utils.RunCommand("bash", "-c", s); err != nil {
-				return err
-			}
-		}
-	}
-	return nil
-}
 
 func setPreGithub() error {
 	shells := []any{
 		authStatus,
 		disablePrompt,
-		fmt.Sprintf(forkRepo, config.GlobalsConfig.GetRepoName(), config.GlobalsConfig.GetForkName(), config.GlobalsConfig.GetOrgCommand()),
-		RetryShell(fmt.Sprintf(checkRepo, config.GlobalsConfig.GetRepoName())),
-		RetryShell(fmt.Sprintf(cloneRepo, config.GlobalsConfig.GetRepoName())),
-		fmt.Sprintf(configEmail, config.GlobalsConfig.GetEmail()),
-		fmt.Sprintf(configUser, config.GlobalsConfig.GetUsername()),
-		SecretShell(fmt.Sprintf(setToken, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetRepoName())),
-		SecretShell(fmt.Sprintf(gitAddRemote, config.GlobalsConfig.GetUsername(), config.GlobalsConfig.GetToken(), config.GlobalsConfig.GetForkName())),
+		fmt.Sprintf(forkRepo, types.GlobalsBotConfig.GetRepoName(), types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.GetOrgCommand()),
+		types.RetryShell(fmt.Sprintf(checkRepo, types.GlobalsBotConfig.GetRepoName())),
+		types.RetryShell(fmt.Sprintf(cloneRepo, types.GlobalsBotConfig.GetRepoName())),
+		fmt.Sprintf(configEmail, types.GlobalsBotConfig.GetEmail()),
+		fmt.Sprintf(configUser, types.GlobalsBotConfig.GetUsername()),
+		types.SecretShell(fmt.Sprintf(setToken, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetRepoName())),
+		types.SecretShell(fmt.Sprintf(gitAddRemote, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetForkName())),
 		fmt.Sprintf(syncRepo),
 	}
-	if err := execFn(shells); err != nil {
+	if err := types.ExecShellForAny(types.GlobalsBotConfig.GetToken())(shells); err != nil {
 		logger.Error("setPreGithub err:%v", err)
 		return err
 	}
@@ -89,9 +53,9 @@ func Changelog(reviews []string) error {
 
 	shells := []any{
 		fmt.Sprintf(newBranch, branchName),
-		fmt.Sprintf(generateChangelog, template.TryParseString(config.GlobalsConfig.GetChangelogScript(), config.GlobalsConfig)),
+		fmt.Sprintf(generateChangelog, template.TryParseString(types.GlobalsBotConfig.GetChangelogScript(), types.GlobalsBotConfig)),
 	}
-	if err := execFn(shells); err != nil {
+	if err := types.ExecShellForAny()(shells); err != nil {
 		return err
 	}
 	if release, ok, err := checkAndCommit(); err != nil {
@@ -99,7 +63,7 @@ func Changelog(reviews []string) error {
 	} else {
 		if ok {
 			afterShell := []any{fmt.Sprintf(gitPush, branchName), fmt.Sprintf(gitPR, release, strings.Join(reviews, ","))}
-			if err = execFn(afterShell); err != nil {
+			if err = types.ExecShellForAny()(afterShell); err != nil {
 				return err
 			}
 		}

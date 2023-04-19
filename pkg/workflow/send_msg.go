@@ -18,9 +18,9 @@ package workflow
 
 import (
 	"bytes"
-	"github.com/labring-actions/gh-rebot/pkg/config"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/template"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 )
 
 type sender struct {
@@ -28,7 +28,7 @@ type sender struct {
 }
 
 func (s *sender) sendMsgToIssue(msgKey string, actionURL ...string) error {
-	msg := config.GlobalsConfig.GetMessage(msgKey)
+	msg := types.GlobalsBotConfig.GetMessage(msgKey)
 	v, b, _ := template.TryParse(msg)
 	if b {
 		out := bytes.NewBuffer(nil)
