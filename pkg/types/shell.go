@@ -17,8 +17,9 @@ limitations under the License.
 package types
 
 import (
+	"github.com/cenkalti/backoff/v4"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
-	"k8s.io/client-go/util/retry"
+	"time"
 )
 
 type RetryShell string
@@ -27,18 +28,21 @@ type SecretShell string
 
 func ExecShellForAny(secrets ...string) func(shells []any) error {
 	return func(shells []any) error {
+		// 设置重试策略
+		exponentialBackoff := backoff.NewExponentialBackOff()
+		exponentialBackoff.MaxElapsedTime = 30 * time.Second
 		for _, sh := range shells {
 			if s, ok := sh.(RetryShell); ok {
-				if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				if err := backoff.Retry(func() error {
 					return utils.RunCommand("bash", "-c", string(s))
-				}); err != nil {
+				}, exponentialBackoff); err != nil {
 					return err
 				}
 			}
 			if s, ok := sh.(RetrySecretShell); ok {
-				if err := retry.RetryOnConflict(retry.DefaultRetry, func() error {
+				if err := backoff.Retry(func() error {
 					return utils.RunCommandInSecret(string(s), secrets)
-				}); err != nil {
+				}, exponentialBackoff); err != nil {
 					return err
 				}
 			}

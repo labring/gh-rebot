@@ -6,12 +6,12 @@ require (
 	github.com/BurntSushi/toml v1.2.1
 	github.com/Masterminds/semver/v3 v3.2.0
 	github.com/Masterminds/sprig/v3 v3.2.3
+	github.com/cenkalti/backoff/v4 v4.2.1
 	github.com/cuisongliu/logger v0.0.0-20230412023448-ca9cfbf2d09a
 	github.com/hashicorp/go-version v1.6.0
 	github.com/pkg/errors v0.9.1
 	github.com/spf13/cobra v1.6.1
 	k8s.io/apimachinery v0.26.3
-	k8s.io/client-go v0.26.2
 	sigs.k8s.io/yaml v1.3.0
 )
 
