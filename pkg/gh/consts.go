@@ -24,7 +24,7 @@ const (
 	forkRepo          = "gh repo view %s >/dev/null 2>&1 || (echo '仓库不存在，正在fork仓库...' && gh repo fork %s %s)"
 	syncRepo          = "cd /tmp/fork-sealos-repo && git fetch fork && git rebase fork/main && git push -f origin main && git fetch --tags fork && git push -f --tags origin"
 	cloneRepo         = "rm -rf /tmp/fork-sealos-repo && gh repo clone %s /tmp/fork-sealos-repo"
-	checkRepo         = "gh repo view %s --json isFork,url,name  -q '.'"
+	checkRepo         = "gh repo view %s --json isFork,url,name,isArchived  -q '.'"
 	setToken          = "cd /tmp/fork-sealos-repo && git remote set-url origin https://%s:%s@github.com/%s.git"
 	newBranch         = "cd /tmp/fork-sealos-repo && git checkout -b %s"
 	generateChangelog = "cd /tmp/fork-sealos-repo && bash %s"
