@@ -1,6 +1,7 @@
 version: v1
 debug: true
 bot:
+  copilot4prs: true
   prefix: /sealos
   spe: _
   allowOps:

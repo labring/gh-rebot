@@ -17,11 +17,12 @@ limitations under the License.
 package types
 
 type Bot struct {
-	Prefix   string   `json:"prefix"`
-	Spe      string   `json:"spe"`
-	AllowOps []string `json:"allowOps"`
-	Email    string   `json:"email"`
-	Username string   `json:"username"`
+	Copilot4prs bool     `json:"copilot4prs"`
+	Prefix      string   `json:"prefix"`
+	Spe         string   `json:"spe"`
+	AllowOps    []string `json:"allowOps"`
+	Email       string   `json:"email"`
+	Username    string   `json:"username"`
 }
 
 type Repo struct {

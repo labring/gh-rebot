@@ -10,6 +10,7 @@ gh-rebot 是一个针对 sealos 项目的 GitHub rebot，用于自动执行一�
 version: v1
 debug: true
 bot:
+  copilot4prs: true
   prefix: /sealos
   spe: _
   allowOps:
@@ -55,6 +56,7 @@ message:
 - `version` - 版本标识，当前为 v1。
 - `debug` - 是否开启调试模式，设置为 true 时开启。
 - `bot` \- 机器人配置。
+   - `copilot4prs` - 是否为 PR 启用 copilot 功能。
    - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/github`
    - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
    - `allowOps` - 允许操作的用户名列表。

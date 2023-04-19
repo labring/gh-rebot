@@ -53,7 +53,7 @@ func Changelog(reviews []string) error {
 
 	shells := []any{
 		fmt.Sprintf(newBranch, branchName),
-		fmt.Sprintf(generateChangelog, template.TryParseString(types.GlobalsBotConfig.GetChangelogScript(), types.GlobalsBotConfig)),
+		types.RetryShell(fmt.Sprintf(generateChangelog, template.TryParseString(types.GlobalsBotConfig.GetChangelogScript(), types.GlobalsBotConfig))),
 	}
 	if err := types.ExecShellForAny()(shells); err != nil {
 		return err
@@ -62,7 +62,18 @@ func Changelog(reviews []string) error {
 		return err
 	} else {
 		if ok {
-			afterShell := []any{fmt.Sprintf(gitPush, branchName), fmt.Sprintf(gitPR, release, strings.Join(reviews, ","))}
+			copilot := ""
+			if types.GlobalsBotConfig.Bot.Copilot4prs {
+				copilot = "<br/>copilot:all"
+			}
+			afterShell := []any{
+				fmt.Sprintf(gitPush, branchName),
+				template.TryParseString(gitPRTmpl, map[string]string{
+					"Title":     "docs: Automated Changelog Update for " + release,
+					"Body":      "🤖 add release changelog using rebot." + copilot,
+					"Reviewers": strings.Join(reviews, ","),
+				}),
+			}
 			if err = types.ExecShellForAny()(afterShell); err != nil {
 				return err
 			}

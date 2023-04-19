@@ -33,7 +33,7 @@ const (
 	gitCommit         = "cd /tmp/fork-sealos-repo && git commit -am '%s' -s"
 	gitRelease        = "cd /tmp/fork-sealos-repo && git describe --abbrev=0 --tags"
 	gitPush           = "cd /tmp/fork-sealos-repo && git push -u origin %s"
-	gitPR             = "cd /tmp/fork-sealos-repo && gh pr create --title 'docs: Automated Changelog Update for %s' --body '🤖 add release changelog using rebot' --reviewer %s "
+	gitPRTmpl         = "cd /tmp/fork-sealos-repo && gh pr create --title '{{.Title}}' --body '{{.Body}}' --reviewer {{.Reviewers}} "
 	gitTag            = "cd /tmp/fork-sealos-repo && git fetch --tags && git tag -l"
 	gitNewTag         = "cd /tmp/fork-sealos-repo && git tag %s"
 	gitAddRemote      = "cd /tmp/fork-sealos-repo && git remote add fork https://%s:%s@github.com/%s.git"
