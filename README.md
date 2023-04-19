@@ -114,3 +114,15 @@ message:
 - 变更日志错误：‼️ 机器人说：操作变更日志错误。
 
 在遇到错误时，请根据提示信息进行相应的调整。
+
+
+## Roadmap
+
+- [ ] 支持label操作
+- [ ] 支持里程碑操作
+- [ ] 支持pr的code review操作
+- [ ] 支持pr的merge操作
+- [ ] 支持pr的close操作
+- [ ] 支持pr的reopen操作
+- [ ] 支持pr的comment操作
+- [ ] 支持pr和issue的assign操作
