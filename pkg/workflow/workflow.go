@@ -50,6 +50,9 @@ func (c *workflow) Release() error {
 		if err = c.sender.sendMsgToIssue("success", action.URL); err != nil {
 			return err
 		}
+		if !types.GlobalsBotConfig.Release.Changelog {
+			return nil
+		}
 		return c.sender.sendCommentMsgToIssue(bot.GetChangelogComment())
 	} else {
 		logger.Error("command format is error: %s ex. /{prefix}_release {tag}", c.Body)

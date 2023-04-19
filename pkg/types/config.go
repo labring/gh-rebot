@@ -38,9 +38,10 @@ type Changelog struct {
 }
 
 type Release struct {
-	Retry    string   `json:"retry"`
-	Action   string   `json:"action"`
-	AllowOps []string `json:"allowOps"`
+	Changelog bool     `json:"changelog"`
+	Retry     string   `json:"retry"`
+	Action    string   `json:"action"`
+	AllowOps  []string `json:"allowOps"`
 }
 
 type Config struct {
