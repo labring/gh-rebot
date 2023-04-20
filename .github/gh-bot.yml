@@ -1,7 +1,6 @@
 version: v1
 debug: true
 bot:
-  copilot4prs: true
   prefix: /sealos
   spe: _
   allowOps:
@@ -20,6 +19,10 @@ changelog:
     - cuisongliu
   reviewers:
     - cuisongliu
+  title: "docs: Automated Changelog Update for {{.ReleaseVersion}}"
+  body: |
+    🤖 add release changelog using rebot.<br/>
+    copilot:all
 
 release:
   retry: 15s

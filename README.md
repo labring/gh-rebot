@@ -10,7 +10,6 @@ gh-rebot 是一个针对 sealos 项目的 GitHub rebot，用于自动执行一�
 version: v1
 debug: true
 bot:
-  copilot4prs: true
   prefix: /sealos
   spe: _
   allowOps:
@@ -24,6 +23,10 @@ repo:
   fork: cuisongliu/sealos
 
 changelog:
+  title: "docs: Automated Changelog Update for {{.ReleaseVersion}}"
+  body: |
+    🤖 add release changelog using rebot.<br/>
+    copilot:all
   script: scripts/changelog.sh
   allowOps:
     - cuisongliu
@@ -56,7 +59,6 @@ message:
 - `version` - 版本标识，当前为 v1。
 - `debug` - 是否开启调试模式，设置为 true 时开启。
 - `bot` \- 机器人配置。
-   - `copilot4prs` - 是否为 PR 启用 copilot 功能。
    - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/`,如果设置为`/` 则 `spe` 失效。命令为`/release`
    - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
    - `allowOps` - 允许操作的用户名列表。
@@ -67,6 +69,8 @@ message:
    - `name` - 仓库名称。
    - `fork` - fork 的仓库名称。
 - `changelog` \- 变更日志配置。
+   - `title` - 变更日志标题模板。`ReleaseVersion`为当前版本号
+   - `body` - 变更日志内容模板。`ReleaseVersion`为当前版本号
    - `script` - 生成变更日志的脚本。默认值 `scripts/changelog.sh`,可使用模板渲染。
    - `allowOps` - 允许触发变更日志操作的用户名列表。
    - `reviewers` - 审核者列表。

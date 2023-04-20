@@ -62,15 +62,11 @@ func Changelog(reviews []string) error {
 		return err
 	} else {
 		if ok {
-			copilot := ""
-			if types.GlobalsBotConfig.Bot.Copilot4prs {
-				copilot = "<br/>copilot:all"
-			}
 			afterShell := []any{
 				fmt.Sprintf(gitPush, branchName),
 				template.TryParseString(gitPRTmpl, map[string]string{
-					"Title":     "docs: Automated Changelog Update for " + release,
-					"Body":      "🤖 add release changelog using rebot." + copilot,
+					"Title":     template.TryParseString(types.GlobalsBotConfig.Changelog.Title, map[string]string{"ReleaseVersion": release}),
+					"Body":      template.TryParseString(types.GlobalsBotConfig.Changelog.Body, map[string]string{"ReleaseVersion": release}),
 					"Reviewers": strings.Join(reviews, ","),
 				}),
 			}
