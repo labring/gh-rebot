@@ -37,6 +37,7 @@ func Tag(tag string) error {
 			if err = types.ExecShellForAny()(shells); err != nil {
 				return err
 			}
+			return nil
 		}
 	}
 	return errors.New("tag already exists")
