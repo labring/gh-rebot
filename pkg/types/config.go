@@ -16,6 +16,8 @@ limitations under the License.
 
 package types
 
+import "fmt"
+
 type Bot struct {
 	Prefix   string   `json:"prefix"`
 	Spe      string   `json:"spe"`
@@ -56,6 +58,34 @@ type Config struct {
 
 	Changelog Changelog `json:"changelog"`
 	Release   Release   `json:"release"`
+}
+
+func (r *Config) Validate() error {
+	if r.Bot.Username == "" {
+		return fmt.Errorf("bot username is required")
+	}
+	if r.Bot.Email == "" {
+		return fmt.Errorf("bot email is required")
+	}
+	if r.Repo.Name == "" {
+		return fmt.Errorf("repo name is required")
+	}
+	if r.Repo.Fork == "" {
+		return fmt.Errorf("repo fork is required")
+	}
+	if r.Changelog.Body == "" {
+		return fmt.Errorf("changelog body is required")
+	}
+	if r.Changelog.Title == "" {
+		return fmt.Errorf("changelog title is required")
+	}
+	if r.Release.Action == "" {
+		return fmt.Errorf("release action is required")
+	}
+	if r.Release.Retry == "" {
+		return fmt.Errorf("release retry is required")
+	}
+	return nil
 }
 
 // GetPrefix returns the prefix for the bot

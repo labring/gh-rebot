@@ -42,6 +42,9 @@ func ParseConfig(filePath string) (*Config, error) {
 	if config.Repo.Org {
 		config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])
 	}
+	if err = config.Validate(); err != nil {
+		return nil, err
+	}
 	return config, nil
 }
 
