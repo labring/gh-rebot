@@ -25,7 +25,8 @@ import (
 )
 
 type sender struct {
-	Body string
+	Body  string
+	Error string
 }
 
 func (s *sender) sendMsgToIssue(msgKey string, actionURL ...string) error {
@@ -34,7 +35,8 @@ func (s *sender) sendMsgToIssue(msgKey string, actionURL ...string) error {
 	if b {
 		out := bytes.NewBuffer(nil)
 		_ = v.Execute(out, map[string]interface{}{
-			"Body": s.Body,
+			"Body":  s.Body,
+			"Error": s.Error,
 		})
 		msg = out.String()
 	}

@@ -34,3 +34,17 @@ func GetChangelogComment() string {
 	}
 	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "changelog"}, types.GlobalsBotConfig.GetSpe())
 }
+
+//approve
+//lgtm
+//hold
+//triage
+///ok-to-test
+
+//assign cc cc
+//cc xx xx xx
+//area
+//------
+
+//issue
+//assign

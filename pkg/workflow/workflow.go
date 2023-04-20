@@ -17,6 +17,7 @@ limitations under the License.
 package workflow
 
 import (
+	"fmt"
 	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/bot"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
@@ -38,6 +39,7 @@ func (c *workflow) Release() error {
 	if len(data) == 2 && utils.ValidateVersion(data[1]) {
 		err := gh.Tag(data[1])
 		if err != nil {
+			c.sender.Error = err.Error()
 			return c.sender.sendMsgToIssue("release_error")
 		}
 		action, err := gh.CheckRelease(data[1])
@@ -45,6 +47,7 @@ func (c *workflow) Release() error {
 			return err
 		}
 		if !action.IsSuccess {
+			c.sender.Error = fmt.Sprintf("release action status is %s,action conclusion is %s", action.Status, action.Conclusion)
 			return c.sender.sendMsgToIssue("release_error", action.URL)
 		}
 		if err = c.sender.sendMsgToIssue("success", action.URL); err != nil {
@@ -68,6 +71,7 @@ func (c *workflow) Changelog() error {
 	if len(data) == 1 {
 		err := gh.Changelog(types.GlobalsBotConfig.Changelog.Reviewers)
 		if err != nil {
+			c.sender.Error = err.Error()
 			return c.sender.sendMsgToIssue("changelog_error")
 		}
 		return c.sender.sendMsgToIssue("success")
