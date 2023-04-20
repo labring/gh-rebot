@@ -19,6 +19,7 @@ package gh
 import (
 	"fmt"
 	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/pkg/errors"
 )
 
 func Tag(tag string) error {
@@ -38,5 +39,5 @@ func Tag(tag string) error {
 			}
 		}
 	}
-	return nil
+	return errors.New("tag already exists")
 }
