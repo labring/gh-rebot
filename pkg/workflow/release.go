@@ -19,7 +19,6 @@ package workflow
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/bot"
 	"github.com/labring-actions/gh-rebot/pkg/gh"
 	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
@@ -52,10 +51,7 @@ func (c *release) Run() error {
 		if err = c.sender.sendMsgToIssue("success", action.URL); err != nil {
 			return err
 		}
-		if !types.GlobalsBotConfig.Release.Changelog {
-			return nil
-		}
-		return c.sender.sendCommentMsgToIssue(bot.GetChangelogComment())
+		return nil
 	} else {
 		logger.Error("command format is error: %s ex. /{prefix}_release {tag}", c.Body)
 		return c.sender.sendMsgToIssue("format_error")
