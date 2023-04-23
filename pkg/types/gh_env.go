@@ -34,7 +34,7 @@ type GithubVar struct {
 }
 
 func (g *GithubVar) String() string {
-	return "RunnerID: " + g.RunnerID + " SafeRepo: " + g.SafeRepo + " IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " CommentBody: " + g.CommentBody + " SenderOrCommentUser: " + g.SenderOrCommentUser
+	return "RunnerID: " + g.RunnerID + " ;SafeRepo: " + g.SafeRepo + " ;IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " ;CommentBody: " + g.CommentBody + " ;SenderOrCommentUser: " + g.SenderOrCommentUser
 }
 
 func (g *GithubVar) GetRunnerURL() string {
