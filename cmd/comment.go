@@ -17,6 +17,7 @@ limitations under the License.
 package cmd
 
 import (
+	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/bot"
 	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/workflow"
@@ -31,6 +32,7 @@ var commentCmd = &cobra.Command{
 	Args: cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		comment := types.GlobalsGithubVar.CommentBody
+		logger.Debug("comment: ", comment)
 		wf := workflow.NewWorkflow(comment)
 		switch {
 		//{prefix}_release
