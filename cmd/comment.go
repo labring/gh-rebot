@@ -18,7 +18,6 @@ package cmd
 
 import (
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/bot"
 	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/workflow"
 	"strings"
@@ -35,19 +34,20 @@ var commentCmd = &cobra.Command{
 		cmds := strings.Split(comment, "\n")
 		for _, t := range cmds {
 			logger.Debug("cmds: ", strings.TrimSpace(t))
-			wf := workflow.NewWorkflow(strings.TrimSpace(t))
-			switch {
-			//{prefix}_release
-			case strings.HasPrefix(comment, bot.GetReleaseComment()):
-				if err := wf.Release(); err != nil {
-					return err
+			wfs := []workflow.Interface{
+				workflow.NewRelease(strings.TrimSpace(t)),
+				workflow.NewChangelog(strings.TrimSpace(t)),
+			}
+			used := 0
+			for _, wf := range wfs {
+				if strings.HasPrefix(t, wf.Comment()) {
+					if err := wf.Run(); err != nil {
+						return err
+					}
+					used++
 				}
-			//{prefix}_changelog
-			case strings.HasPrefix(comment, bot.GetChangelogComment()):
-				if err := wf.Changelog(); err != nil {
-					return err
-				}
-			default:
+			}
+			if used == 0 {
 				logger.Warn("not support command: ", t)
 			}
 		}

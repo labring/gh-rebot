@@ -17,6 +17,18 @@ limitations under the License.
 package workflow
 
 type Interface interface {
-	Release() error
-	Changelog() error
+	Run() error
+	Comment() string
+}
+
+type workflow struct {
+	Body   string
+	sender *sender
+}
+
+func newWorkflow(body string) *workflow {
+	return &workflow{
+		Body:   body,
+		sender: &sender{Body: body},
+	}
 }

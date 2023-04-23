@@ -26,12 +26,11 @@ import (
 	"strings"
 )
 
-type workflow struct {
-	Body   string
-	sender *sender
+type release struct {
+	*workflow
 }
 
-func (c *workflow) Release() error {
+func (c *release) Run() error {
 	if checkPermission(types.GlobalsBotConfig.Release.AllowOps) != nil {
 		return c.sender.sendMsgToIssue("permission_error")
 	}
@@ -63,24 +62,13 @@ func (c *workflow) Release() error {
 	}
 }
 
-func (c *workflow) Changelog() error {
-	if checkPermission(types.GlobalsBotConfig.Changelog.AllowOps) != nil {
-		return c.sender.sendMsgToIssue("permission_error")
+func (c *release) Comment() string {
+	if types.GlobalsBotConfig.GetPrefix() == "/" {
+		return "/release"
 	}
-	data := strings.Split(c.Body, " ")
-	if len(data) == 1 {
-		err := gh.Changelog(types.GlobalsBotConfig.Changelog.Reviewers)
-		if err != nil {
-			c.sender.Error = err.Error()
-			return c.sender.sendMsgToIssue("changelog_error")
-		}
-		return c.sender.sendMsgToIssue("success")
-	} else {
-		logger.Error("command format is error: %s ex. /{prefix}_changelog", c.Body)
-		return c.sender.sendMsgToIssue("format_error")
-	}
+	return strings.Join([]string{types.GlobalsBotConfig.GetPrefix(), "release"}, types.GlobalsBotConfig.GetSpe())
 }
 
-func NewWorkflow(body string) Interface {
-	return &workflow{Body: body, sender: &sender{Body: body}}
+func NewRelease(body string) Interface {
+	return &release{workflow: newWorkflow(body)}
 }
