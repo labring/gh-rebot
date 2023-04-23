@@ -33,6 +33,10 @@ var commentCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		comment := types.GlobalsGithubVar.CommentBody
 		logger.Debug("comment: ", comment)
+		cmds := strings.Split(comment, "\n")
+		for _, t := range cmds {
+			logger.Debug("cmds: ", t)
+		}
 		wf := workflow.NewWorkflow(comment)
 		switch {
 		//{prefix}_release
