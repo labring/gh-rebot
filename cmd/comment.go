@@ -35,7 +35,7 @@ var commentCmd = &cobra.Command{
 		logger.Debug("comment: ", comment)
 		cmds := strings.Split(comment, "\n")
 		for _, t := range cmds {
-			logger.Debug("cmds: ", t)
+			logger.Debug("cmds: ", strings.TrimSpace(t))
 		}
 		wf := workflow.NewWorkflow(comment)
 		switch {
