@@ -34,7 +34,6 @@ changelog:
     - cuisongliu
 
 release:
-  changelog: true
   retry: 15s
   action: Release
   allowOps:
@@ -75,7 +74,6 @@ message:
    - `allowOps` - 允许触发变更日志操作的用户名列表。
    - `reviewers` - 审核者列表。
 - `release` \- 发布配置。
-   - `changelog` - 是否生成变更日志，设置为 true 时生成。
    - `retry` - 重试间隔，例如：15s。
    - `action` - 执行动作，例如：Release。
    - `allowOps` - 允许触发发布操作的用户名列表。
