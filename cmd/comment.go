@@ -32,19 +32,24 @@ var commentCmd = &cobra.Command{
 	Args: cobra.ExactArgs(0),
 	RunE: func(cmd *cobra.Command, args []string) error {
 		comment := types.GlobalsGithubVar.CommentBody
-		logger.Debug("comment: ", comment)
 		cmds := strings.Split(comment, "\n")
 		for _, t := range cmds {
 			logger.Debug("cmds: ", strings.TrimSpace(t))
-		}
-		wf := workflow.NewWorkflow(comment)
-		switch {
-		//{prefix}_release
-		case strings.HasPrefix(comment, bot.GetReleaseComment()):
-			return wf.Release()
-		//{prefix}_changelog
-		case strings.HasPrefix(comment, bot.GetChangelogComment()):
-			return wf.Changelog()
+			wf := workflow.NewWorkflow(strings.TrimSpace(t))
+			switch {
+			//{prefix}_release
+			case strings.HasPrefix(comment, bot.GetReleaseComment()):
+				if err := wf.Release(); err != nil {
+					return err
+				}
+			//{prefix}_changelog
+			case strings.HasPrefix(comment, bot.GetChangelogComment()):
+				if err := wf.Changelog(); err != nil {
+					return err
+				}
+			default:
+				logger.Warn("not support command: ", t)
+			}
 		}
 		return nil
 	},
