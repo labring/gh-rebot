@@ -1,4 +1,4 @@
-ARG TARGETARCH
+ARG TARGETARCH=amd64
 
 FROM --platform=linux/${TARGETARCH} alpine:3.16.2
 

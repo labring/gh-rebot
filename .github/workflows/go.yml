@@ -38,11 +38,12 @@ jobs:
           cp dist/gh-rebot_linux_amd64_v1/gh-rebot  gh-rebot
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1
-      - name: Build and push
-        uses: docker/build-push-action@v2
-        with:
-          context: .
-          file: ./Dockerfile
-          push: true
-          tags: ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }}
-          labels: org.opencontainers.image.source=https://github.com/labring-actions/gh-rebot
+      - name: build (and publish) main image
+        run: |
+          docker build \
+          --platform linux/amd64 \
+          --label "org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/gh-rebot" \
+          --push \
+          -t ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }} \
+          -f Dockerfile \
+          .
