@@ -26,10 +26,5 @@ func RegistryHttpServer(port uint16) error {
 	gin.SetMode(gin.ReleaseMode)
 
 	r.POST("/webhook", webhookHandler)
-	// k8s core group
-	apiCore := r.Group("/api/v1")
-	{
-		apiCore.GET("/namespaces/:namespace/pods/:podName/log", podLogs)
-	}
 	return r.Run(fmt.Sprintf("%s:%d", "0.0.0.0", port))
 }
