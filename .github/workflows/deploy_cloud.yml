@@ -10,10 +10,10 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Create/Modify deployment
-        uses: gane5hvarma/kubectl-actions@master
-        env:
-          KUBE_CONFIG_DATA: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
+      - uses: Deploy to cluster
         with:
-          args: set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.imageTag }}
-
+          kube-config: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
+          kube-version: 1.24.0
+      - name: Run set image
+        run: |
+          kubectl set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.imageTag }}
