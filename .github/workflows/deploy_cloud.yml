@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to cluster
-        users: ThomasKliszowski/setup-kubectl@v1
+        uses: ThomasKliszowski/setup-kubectl@v1
         with:
           kube-config: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
           kube-version: 1.24.0
