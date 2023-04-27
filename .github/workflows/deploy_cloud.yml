@@ -10,7 +10,8 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - uses: Deploy to cluster
+      - name: Deploy to cluster
+        users: ThomasKliszowski/setup-kubectl@v1
         with:
           kube-config: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
           kube-version: 1.24.0
