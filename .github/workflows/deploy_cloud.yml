@@ -5,6 +5,9 @@ on:
     inputs:
       imageTag:
         required: true
+      deployment:
+        required: true
+        default: webhook-actions
 jobs:
   build:
     name: Build
@@ -17,4 +20,4 @@ jobs:
           kube-version: 1.24.0
       - name: Run set image
         run: |
-          kubectl set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.imageTag }}
+          kubectl set image deployment/${{ github.event.inputs.deployment }} *=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.imageTag }}
