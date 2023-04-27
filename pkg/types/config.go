@@ -55,8 +55,8 @@ type Config struct {
 	Message map[string]string `json:"message"`
 	Token   string            `json:"-"`
 
-	Changelog Changelog `json:"changelog"`
-	Release   Release   `json:"release"`
+	Changelog *Changelog `json:"changelog,omitempty"`
+	Release   *Release   `json:"release,omitempty"`
 }
 
 func (r *Config) Validate() error {
@@ -72,18 +72,23 @@ func (r *Config) Validate() error {
 	if r.Repo.Fork == "" {
 		return fmt.Errorf("repo fork is required")
 	}
-	if r.Changelog.Body == "" {
-		return fmt.Errorf("changelog body is required")
+	if r.Changelog != nil {
+		if r.Changelog.Body == "" {
+			return fmt.Errorf("changelog body is required")
+		}
+		if r.Changelog.Title == "" {
+			return fmt.Errorf("changelog title is required")
+		}
 	}
-	if r.Changelog.Title == "" {
-		return fmt.Errorf("changelog title is required")
+	if r.Release != nil {
+		if r.Release.Action == "" {
+			return fmt.Errorf("release action is required")
+		}
+		if r.Release.Retry == "" {
+			return fmt.Errorf("release retry is required")
+		}
 	}
-	if r.Release.Action == "" {
-		return fmt.Errorf("release action is required")
-	}
-	if r.Release.Retry == "" {
-		return fmt.Errorf("release retry is required")
-	}
+
 	return nil
 }
 

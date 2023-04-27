@@ -25,7 +25,6 @@ import (
 	"github.com/spf13/cobra"
 )
 
-// commentCmd represents the comment command
 var commentCmd = &cobra.Command{
 	Use:  "comment",
 	Args: cobra.ExactArgs(0),
@@ -34,9 +33,12 @@ var commentCmd = &cobra.Command{
 		cmds := strings.Split(comment, "\n")
 		for _, t := range cmds {
 			logger.Debug("cmds: ", strings.TrimSpace(t))
-			wfs := []workflow.Interface{
-				workflow.NewRelease(strings.TrimSpace(t)),
-				workflow.NewChangelog(strings.TrimSpace(t)),
+			wfs := make([]workflow.Interface, 0)
+			if types.GlobalsBotConfig.Changelog != nil {
+				wfs = append(wfs, workflow.NewChangelog(strings.TrimSpace(t)))
+			}
+			if types.GlobalsBotConfig.Release != nil {
+				wfs = append(wfs, workflow.NewRelease(strings.TrimSpace(t)))
 			}
 			used := 0
 			for _, wf := range wfs {
