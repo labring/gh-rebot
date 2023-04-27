@@ -15,5 +15,5 @@ jobs:
         env:
           KUBE_CONFIG_DATA: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
         with:
-          args: set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.fromImage }}
+          args: set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.imageTag }}
 
