@@ -25,13 +25,14 @@ import (
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"io"
 	v1 "k8s.io/api/core/v1"
+	v12 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"net/http"
 )
 
 type GetPodLogReq struct {
 	Container    string `form:"container"`
 	Follow       bool   `form:"follow"`
-	TailLines    int64  `form:"tailLines" binding:"required"`
+	TailLines    int64  `form:"tailLines"`
 	SinceSeconds int64  `form:"sinceSeconds"`
 	Previous     bool   `form:"previous"`
 }
@@ -68,6 +69,13 @@ func podLogs(c *gin.Context) {
 	}
 
 	kubeClient := cli.Kubernetes()
+
+	_, err := kubeClient.CoreV1().Pods(namespace).Get(context.TODO(), podName, v12.GetOptions{})
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "get pod failed", "msg": err.Error(), "pod": podName, "namespace": namespace})
+		return
+	}
+
 	req := kubeClient.CoreV1().Pods(namespace).GetLogs(podName, podLogOption)
 
 	if !podLogOption.Follow {
