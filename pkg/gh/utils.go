@@ -18,6 +18,8 @@ package gh
 
 import (
 	"fmt"
+	"github.com/cuisongliu/logger"
+	"github.com/labring-actions/gh-rebot/pkg/types"
 	"github.com/labring-actions/gh-rebot/pkg/utils"
 	"math/rand"
 	"strings"
@@ -83,4 +85,24 @@ func checkRemoteTagExists(tag string) (bool, error) {
 	}
 
 	return false, nil
+}
+
+func setPreGithub() error {
+	shells := []any{
+		authStatus,
+		disablePrompt,
+		fmt.Sprintf(forkRepo, types.GlobalsBotConfig.GetRepoName(), types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.GetOrgCommand()),
+		types.RetryShell(fmt.Sprintf(checkRepo, types.GlobalsBotConfig.GetRepoName())),
+		types.RetryShell(fmt.Sprintf(cloneRepo, types.GlobalsBotConfig.GetRepoName())),
+		fmt.Sprintf(configEmail, types.GlobalsBotConfig.GetEmail()),
+		fmt.Sprintf(configUser, types.GlobalsBotConfig.GetUsername()),
+		types.SecretShell(fmt.Sprintf(setToken, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetRepoName())),
+		types.SecretShell(fmt.Sprintf(gitAddRemote, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetForkName())),
+		fmt.Sprintf(syncRepo),
+	}
+	if err := types.ExecShellForAny(types.GlobalsBotConfig.GetToken())(shells); err != nil {
+		logger.Error("setPreGithub err:%v", err)
+		return err
+	}
+	return nil
 }

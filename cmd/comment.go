@@ -34,9 +34,6 @@ var commentCmd = &cobra.Command{
 		for _, t := range cmds {
 			logger.Debug("cmds: ", strings.TrimSpace(t))
 			wfs := make([]workflow.Interface, 0)
-			if types.GlobalsBotConfig.Changelog != nil {
-				wfs = append(wfs, workflow.NewChangelog(strings.TrimSpace(t)))
-			}
 			if types.GlobalsBotConfig.Release != nil {
 				wfs = append(wfs, workflow.NewRelease(strings.TrimSpace(t)))
 			}

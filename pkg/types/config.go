@@ -55,8 +55,7 @@ type Config struct {
 	Message map[string]string `json:"message"`
 	Token   string            `json:"-"`
 
-	Changelog *Changelog `json:"changelog,omitempty"`
-	Release   *Release   `json:"release,omitempty"`
+	Release *Release `json:"release,omitempty"`
 }
 
 func (r *Config) Validate() error {
@@ -71,14 +70,6 @@ func (r *Config) Validate() error {
 	}
 	if r.Repo.Fork == "" {
 		return fmt.Errorf("repo fork is required")
-	}
-	if r.Changelog != nil {
-		if r.Changelog.Body == "" {
-			return fmt.Errorf("changelog body is required")
-		}
-		if r.Changelog.Title == "" {
-			return fmt.Errorf("changelog title is required")
-		}
 	}
 	if r.Release != nil {
 		if r.Release.Action == "" {
@@ -153,11 +144,4 @@ func (c *Config) GetMessage(key string) string {
 		return c.Message[key]
 	}
 	return ""
-}
-
-func (c *Config) GetChangelogScript() string {
-	if c.Changelog.Script == "" {
-		return "scripts/changelog.sh"
-	}
-	return c.Changelog.Script
 }

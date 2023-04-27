@@ -13,17 +13,6 @@ repo:
   name: labring-actions/sealos
   fork: cuisongliu/sealos
 
-changelog:
-  script: scripts/changelog.sh {{.Repo.Fork}}
-  allowOps:
-    - cuisongliu
-  reviewers:
-    - cuisongliu
-  title: "docs: Automated Changelog Update for {{.ReleaseVersion}}"
-  body: |
-    🤖 add release changelog using rebot.<br/>
-    copilot:all
-
 release:
   retry: 15s
   action: Release
@@ -40,8 +29,4 @@ message:
   release_error: |
     🤖 says: ‼️ Release action failed.
     Error details: {{.Error}}
-  changelog_error: |
-    🤖 says: ‼️ Changelog action encountered an error.
-    Error details: {{.Error}}
-
 

@@ -22,17 +22,6 @@ repo:
   name: labring-actions/sealos
   fork: cuisongliu/sealos
 
-changelog:
-  title: "docs: Automated Changelog Update for {{.ReleaseVersion}}"
-  body: |
-    🤖 add release changelog using rebot.<br/>
-    copilot:all
-  script: scripts/changelog.sh
-  allowOps:
-    - cuisongliu
-  reviewers:
-    - cuisongliu
-
 release:
   retry: 15s
   action: Release
@@ -48,8 +37,6 @@ message:
     🤖 says: ‼️ The action no has permission to trigger.
   release_error: |
     🤖 says: ‼️ The action release error.
-  changelog_error: |
-    🤖 says: ‼️ The action changelog error.
 
 ```
 
@@ -67,12 +54,6 @@ message:
    - `org` - 是否为组织仓库，设置为 true 时表示是组织仓库。
    - `name` - 仓库名称。
    - `fork` - fork 的仓库名称。
-- `changelog` \- 变更日志配置。
-   - `title` - 变更日志标题模板。`ReleaseVersion`为当前版本号
-   - `body` - 变更日志内容模板。`ReleaseVersion`为当前版本号
-   - `script` - 生成变更日志的脚本。默认值 `scripts/changelog.sh`,可使用模板渲染。
-   - `allowOps` - 允许触发变更日志操作的用户名列表。
-   - `reviewers` - 审核者列表。
 - `release` \- 发布配置。
    - `retry` - 重试间隔，例如：15s。
    - `action` - 执行动作，例如：Release。
@@ -82,7 +63,6 @@ message:
    - `format_error` - 格式错误消息模板。
    - `permission_error` - 权限错误消息模板。
    - `release_error` - 发布错误消息模板。
-   - `changelog_error` - 变更日志错误消息模板。
 
 ## 使用文档
 
@@ -94,13 +74,9 @@ message:
 
 ### 变更日志操作
 
-如果需要生成变更日志，请在 issue 或 PR 中使用以下命令：
+之前的操作已经废弃，使用 https://github.com/labring/sealos/blob/d528d6be713b9b9cf92169e5822d354d29fffb9d/.github/workflows/release.yml#L72
 
-```bash
-/sealos_changelog
-```
 
-此命令会触发配置文件中定义的脚本（如本例中的 `scripts/changelog.sh`）来生成变更日志。需要注意的是，只有在 `changelog` 配置节中的 `allowOps` 列表中的用户才有权限触发此操作。
 
 ### 发布操作
 
@@ -117,7 +93,6 @@ message:
 - 格式错误：‼️ 机器人说：操作格式错误，请检查此操作的格式。
 - 权限错误：‼️ 机器人说：操作无权限触发。
 - 发布错误：‼️ 机器人说：操作发布错误。
-- 变更日志错误：‼️ 机器人说：操作变更日志错误。
 
 在遇到错误时，请根据提示信息进行相应的调整。
 
