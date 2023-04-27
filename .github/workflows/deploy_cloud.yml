@@ -1,0 +1,19 @@
+name: Deploy to cloud
+
+on:
+  workflow_dispatch:
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Expose git commit data
+        uses: rlespinasse/git-commit-data-action@v1
+      - name: deploy to cluster
+        uses: sidhusmart/kubectl@master
+        env:
+          KUBE_CONFIG_DATA: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
+        with:
+          args: set image --record deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }}
+
+
