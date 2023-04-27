@@ -22,6 +22,9 @@ var webhookCmd = &cobra.Command{
 }
 
 func init() {
+	cobra.OnInitialize(func() {
+		checkToken()
+	})
 	rootCmd.AddCommand(webhookCmd)
 
 	// Here you will define your flags and configuration settings.

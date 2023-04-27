@@ -61,6 +61,9 @@ var commentCmd = &cobra.Command{
 }
 
 func init() {
+	cobra.OnInitialize(func() {
+		checkToken()
+	})
 	rootCmd.AddCommand(commentCmd)
 	// Here you will define your flags and configuration settings.
 

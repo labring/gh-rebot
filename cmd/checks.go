@@ -20,6 +20,8 @@ import (
 	"fmt"
 	"github.com/cuisongliu/logger"
 	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/pkg/errors"
+	"os"
 )
 
 func preCheck() error {
@@ -47,6 +49,31 @@ func checkGithubEnv() error {
 	}
 	if types.GlobalsGithubVar.IssueOrPRNumber == 0 {
 		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")
+	}
+	return nil
+}
+
+func checkToken() {
+	var err error
+	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
+	if err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+	if err = types.GlobalsBotConfig.Validate(); err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+	logger.Cfg(types.GlobalsBotConfig.GetDebug(), false)
+	if err := checkGhToken(); err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+}
+
+func checkGhToken() error {
+	if _, ok := os.LookupEnv("GH_TOKEN"); !ok {
+		return errors.New("error: GH_TOKEN is not set. Please set the GH_TOKEN environment variable to enable authentication and access to the GitHub API")
 	}
 	return nil
 }
