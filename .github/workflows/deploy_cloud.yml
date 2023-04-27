@@ -2,17 +2,18 @@ name: Deploy to cloud
 
 on:
   workflow_dispatch:
+    inputs:
+      imageTag:
+        required: true
 jobs:
   build:
     name: Build
     runs-on: ubuntu-latest
     steps:
-      - name: Expose git commit data
-        uses: rlespinasse/git-commit-data-action@v1
       - name: Create/Modify deployment
         uses: gane5hvarma/kubectl-actions@master
         env:
           KUBE_CONFIG_DATA: ${{ secrets.CLOUD_KUBECONFIG_BASE64 }}
         with:
-          args: set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }}
+          args: set image deployment/webhook-actions webhook-actions=ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ github.event.inputs.fromImage }}
 
