@@ -28,6 +28,7 @@ import (
 type GithubVar struct {
 	RunnerID            string
 	SafeRepo            string
+	RepoName            string
 	IssueOrPRNumber     int64
 	CommentBody         string
 	SenderOrCommentUser string
@@ -61,6 +62,7 @@ func GetGHEnvToVar() (*GithubVar, error) {
 	}
 	gVar.IssueOrPRNumber = id
 	gVar.SafeRepo, _, _ = unstructured.NestedString(mData, "repository", "full_name")
+	gVar.RepoName, _, _ = unstructured.NestedString(mData, "repository", "name")
 	gVar.CommentBody, _, _ = unstructured.NestedString(mData, "comment", "body")
 
 	user, ok, _ := unstructured.NestedString(mData, "comment", "user", "login")

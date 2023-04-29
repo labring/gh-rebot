@@ -121,11 +121,17 @@ func (r *Config) GetOrgCommand() string {
 
 // GetRepoName returns the name for the repo
 func (r *Config) GetRepoName() string {
+	if r.Repo.Name == "" {
+		r.Repo.Name = fmt.Sprintf("%s/%s", r.Bot.Username, GlobalsGithubVar.RepoName)
+	}
 	return r.Repo.Name
 }
 
 // GetForkName returns the fork for the repo
 func (r *Config) GetForkName() string {
+	if r.Repo.Fork == "" {
+		r.Repo.Fork = GlobalsGithubVar.SafeRepo
+	}
 	return r.Repo.Fork
 }
 

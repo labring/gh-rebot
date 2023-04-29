@@ -9,9 +9,7 @@ bot:
   email: sealos-ci-robot@sealos.io
   username: sealos-ci-robot
 repo:
-  org: true
-  name: labring-actions/sealos
-  fork: cuisongliu/sealos
+  org: false
 
 release:
   retry: 15s

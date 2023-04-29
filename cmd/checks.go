@@ -25,13 +25,7 @@ import (
 )
 
 func preCheck() error {
-	var err error
-	types.GlobalsGithubVar, err = types.GetGHEnvToVar()
-	if err != nil {
-		return err
-	}
-	logger.Debug("github env to var: %v", types.GlobalsGithubVar)
-	if err = checkGithubEnv(); err != nil {
+	if err := checkGithubEnv(); err != nil {
 		return err
 	}
 	return nil
@@ -55,6 +49,12 @@ func checkGithubEnv() error {
 
 func checkToken() {
 	var err error
+	types.GlobalsGithubVar, err = types.GetGHEnvToVar()
+	if err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+	logger.Debug("github env to var: %v", types.GlobalsGithubVar)
 	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
 	if err != nil {
 		logger.Error(err)
