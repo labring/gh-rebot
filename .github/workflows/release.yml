@@ -57,7 +57,7 @@ jobs:
         with:
           args: release  --timeout=1h --debug
         env:
-          GITHUB_TOKEN: ${{ secrets.G_REGISTRY_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_RELEASE_PAT }}
           VERSION: ${{ steps.prepare.outputs.tag_name }}
           USERNAME: ${{ github.repository_owner }}
           GORELEASER_PREVIOUS_TAG: ${{ steps.previoustag.outputs.PREVIOUS_TAG }}
