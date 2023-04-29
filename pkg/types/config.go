@@ -65,10 +65,10 @@ func (r *Config) Validate() error {
 	if r.Bot.Email == "" {
 		return fmt.Errorf("bot email is required")
 	}
-	if r.Repo.Name == "" {
+	if r.GetRepoName() == "" {
 		return fmt.Errorf("repo name is required")
 	}
-	if r.Repo.Fork == "" {
+	if r.GetForkName() == "" {
 		return fmt.Errorf("repo fork is required")
 	}
 	if r.Release != nil {
