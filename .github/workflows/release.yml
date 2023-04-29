@@ -14,7 +14,26 @@ jobs:
       DOCKER_CLI_EXPERIMENTAL: "enabled"
     steps:
       - name: Checkout
-        uses: actions/checkout@master
+        uses: actions/checkout@3
+        with:
+          fetch-depth: 0
+
+      - name: Set up Go
+        uses: actions/setup-go@master
+        with:
+          go-version: 1.19.x
+
+
+      - name: Get previous tag
+        id: previoustag
+        run: |
+          PREVIOUS_TAG=$(git describe --abbrev=0 --tags `git rev-list --tags --skip=1 --max-count=1`)
+          echo "PREVIOUS_TAG=$PREVIOUS_TAG" >> $GITHUB_OUTPUT
+
+      - name: Display previous tag
+        run: |
+          echo "Previous tag: ${{ steps.previoustag.outputs.PREVIOUS_TAG }}"
+      
 
       - name: Set up Go
         uses: actions/setup-go@master
@@ -41,3 +60,4 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.G_REGISTRY_TOKEN }}
           VERSION: ${{ steps.prepare.outputs.tag_name }}
           USERNAME: ${{ github.repository_owner }}
+          GORELEASER_PREVIOUS_TAG: ${{ steps.previoustag.outputs.PREVIOUS_TAG }}
