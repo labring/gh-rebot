@@ -32,7 +32,7 @@ jobs:
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
-          password: ${{ secrets.G_REGISTRY_TOKEN }}
+          password: ${{ secrets.GH_RELEASE_PAT }}
       - name: Copy file
         run: |
           cp dist/gh-rebot_linux_amd64_v1/gh-rebot  gh-rebot
