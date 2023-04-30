@@ -19,8 +19,8 @@ package gh
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/types"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/utils"
 	"k8s.io/apimachinery/pkg/util/json"
 	"strings"
 	"time"

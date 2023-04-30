@@ -18,7 +18,7 @@ package gh
 
 import (
 	"fmt"
-	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/pkg/errors"
 )
 

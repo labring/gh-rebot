@@ -18,8 +18,8 @@ package cmd
 
 import (
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/types"
-	"github.com/labring-actions/gh-rebot/pkg/workflow"
+	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/workflow"
 	"strings"
 
 	"github.com/spf13/cobra"

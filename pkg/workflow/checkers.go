@@ -17,8 +17,8 @@ limitations under the License.
 package workflow
 
 import (
-	"github.com/labring-actions/gh-rebot/pkg/types"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 )
 

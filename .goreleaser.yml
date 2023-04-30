@@ -15,9 +15,9 @@ builds:
       - arm64
     ldflags:
       - -s -w
-      - -X github.com/labring-actions/gh-rebot/pkg/version.gitVersion={{.Version}}
-      - -X github.com/labring-actions/gh-rebot/pkg/version.gitCommit={{.ShortCommit}}
-      - -X github.com/labring-actions/gh-rebot/pkg/version.buildDate={{.Date}}
+      - -X github.com/labring/gh-rebot/pkg/version.gitVersion={{.Version}}
+      - -X github.com/labring/gh-rebot/pkg/version.gitCommit={{.ShortCommit}}
+      - -X github.com/labring/gh-rebot/pkg/version.buildDate={{.Date}}
 
 
 dockers:
@@ -40,7 +40,7 @@ dockers:
       - --label=io.sealos.image.auth={{ .Env.USERNAME }}
       - --label=org.opencontainers.image.description="Automatically github bot for Sealos using comment and cmd"
       - --label=org.opencontainers.image.licenses="Apache 2.0"
-      - --label=org.opencontainers.image.source="https://github.com/labring-actions/gh-rebot"
+      - --label=org.opencontainers.image.source="https://github.com/labring/gh-rebot"
   - use: buildx
     ids:
       - gh-rebot
@@ -60,7 +60,7 @@ dockers:
       - --label=io.sealos.image.auth={{ .Env.USERNAME }}
       - --label=org.opencontainers.image.description="Automatically github bot for Sealos using comment and cmd"
       - --label=org.opencontainers.image.licenses="Apache 2.0"
-      - --label=org.opencontainers.image.source="https://github.com/labring-actions/gh-rebot"
+      - --label=org.opencontainers.image.source="https://github.com/labring/gh-rebot"
 docker_manifests:
   - name_template: ghcr.io/{{ .Env.USERNAME }}/gh-rebot:{{ .Tag }}
     image_templates:
@@ -116,12 +116,12 @@ changelog:
 release:
   prerelease: auto
   header: |
-    ## labring-actions: gh-rebot {{ .Tag }}
-    We are excited to present to you the latest tool from labring-actions: gh-rebot {{ .Tag }}! Gh-rebot is a powerful automation tool designed specifically for GitHub repositories, with features such as handling issue and PR comments, automatic publishing, and auto-generating changelog files. In this article, we will provide a brief introduction to the main features of gh-rebot and how to obtain the corresponding Docker image.
+    ## labring: gh-rebot {{ .Tag }}
+    We are excited to present to you the latest tool from labring: gh-rebot {{ .Tag }}! Gh-rebot is a powerful automation tool designed specifically for GitHub repositories, with features such as handling issue and PR comments, automatic publishing, and auto-generating changelog files. In this article, we will provide a brief introduction to the main features of gh-rebot and how to obtain the corresponding Docker image.
 
     ## Usage Instructions
   
-    gh-rebot is a powerful tool that can help you effortlessly handle issue and PR comments in your GitHub repositories while also automatically publishing and generating changelog files. To start using gh-rebot, you first need to download the precompiled binary file suitable for your operating system. You can find these files on our [GitHub Releases page](https://github.com/labring-actions/gh-rebot/releases).
+    gh-rebot is a powerful tool that can help you effortlessly handle issue and PR comments in your GitHub repositories while also automatically publishing and generating changelog files. To start using gh-rebot, you first need to download the precompiled binary file suitable for your operating system. You can find these files on our [GitHub Releases page](https://github.com/labring/gh-rebot/releases).
   
     ### Installation
   
@@ -147,13 +147,13 @@ release:
     For added convenience, we also provide a Docker image for gh-rebot. You can obtain the image with the following command:
 
     ```bash
-    docker pull ghcr.io/labring-actions/gh-rebot:{{ .Tag }}
+    docker pull ghcr.io/labring/gh-rebot:{{ .Tag }}
     ```
 
     To run the gh-rebot Docker container, use the following command:
 
     ```bash
-    docker run --rm -it ghcr.io/labring-actions/gh-rebot:{{ .Tag }} [OPTIONS]
+    docker run --rm -it ghcr.io/labring/gh-rebot:{{ .Tag }} [OPTIONS]
     ```
   
     Here, `OPTIONS` are the options you want to pass to gh-rebot.
@@ -163,4 +163,4 @@ release:
 
     * * *
     
-    Thank you for your interest and support in labring-actions and gh-rebot! If you encounter any problems during use, please feel free to submit an issue in our [GitHub repository](https://github.com/labring-actions/gh-rebot). We will resolve your issue as soon as possible.
+    Thank you for your interest and support in labring and gh-rebot! If you encounter any problems during use, please feel free to submit an issue in our [GitHub repository](https://github.com/labring/gh-rebot). We will resolve your issue as soon as possible.

@@ -5,7 +5,7 @@ package cmd
 
 import (
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/webhook"
+	"github.com/labring/gh-rebot/pkg/webhook"
 
 	"github.com/spf13/cobra"
 )

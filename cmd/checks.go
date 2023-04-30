@@ -19,7 +19,7 @@ package cmd
 import (
 	"fmt"
 	"github.com/cuisongliu/logger"
-	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/pkg/errors"
 	"os"
 )

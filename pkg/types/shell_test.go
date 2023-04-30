@@ -21,7 +21,7 @@ import (
 )
 
 func TestExecShellForAny(t *testing.T) {
-	if err := ExecShellForAny()([]any{RetryShell("rm -rf /tmp/fork-sealos-repo && gh repo clone labring-actions/sealos1 /tmp/fork-sealos-repo")}); err != nil {
+	if err := ExecShellForAny()([]any{RetryShell("rm -rf /tmp/fork-sealos-repo && gh repo clone labring/sealos1 /tmp/fork-sealos-repo")}); err != nil {
 		t.Errorf("ExecShellForAny() error = %v", err)
 	}
 }

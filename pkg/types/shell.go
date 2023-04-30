@@ -18,7 +18,7 @@ package types
 
 import (
 	"github.com/cenkalti/backoff/v4"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/labring/gh-rebot/pkg/utils"
 	"time"
 )
 

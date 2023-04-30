@@ -17,7 +17,7 @@ package template
 import (
 	"bytes"
 	"fmt"
-	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/types"
 	"testing"
 )
 

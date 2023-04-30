@@ -17,7 +17,7 @@ limitations under the License.
 package bot
 
 import (
-	"github.com/labring-actions/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/types"
 	"strings"
 )
 

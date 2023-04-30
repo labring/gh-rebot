@@ -18,9 +18,9 @@ package workflow
 
 import (
 	"bytes"
-	"github.com/labring-actions/gh-rebot/pkg/template"
-	"github.com/labring-actions/gh-rebot/pkg/types"
-	"github.com/labring-actions/gh-rebot/pkg/utils"
+	"github.com/labring/gh-rebot/pkg/template"
+	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/utils"
 	"github.com/pkg/errors"
 )
 

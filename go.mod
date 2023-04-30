@@ -1,4 +1,4 @@
-module github.com/labring-actions/gh-rebot
+module github.com/labring/gh-rebot
 
 go 1.20
 

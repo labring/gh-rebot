@@ -19,7 +19,7 @@ bot:
   username: sealos-ci-robot
 repo:
   org: true
-  name: labring-actions/sealos
+  name: labring/sealos
   fork: cuisongliu/sealos
 
 release:
