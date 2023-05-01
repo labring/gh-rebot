@@ -56,7 +56,7 @@ const (
 
 type Config struct {
 	Version string            `json:"version"`
-	Type    string            `json:"type"`
+	Type    Type              `json:"type"`
 	Debug   bool              `json:"debug"`
 	Bot     Bot               `json:"bot"`
 	Repo    Repo              `json:"repo"`
