@@ -1,6 +1,6 @@
 version: v1
 debug: true
-type: actions
+type: action
 bot:
   prefix: /
   spe: _
