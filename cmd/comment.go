@@ -53,9 +53,6 @@ var commentCmd = &cobra.Command{
 		return nil
 	},
 	PreRunE: func(cmd *cobra.Command, args []string) error {
-		if err := preCheck(); err != nil {
-			return err
-		}
 		return nil
 	},
 }

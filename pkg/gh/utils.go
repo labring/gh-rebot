@@ -92,15 +92,15 @@ func setPreGithub() error {
 		authStatus,
 		disablePrompt,
 		fmt.Sprintf(forkRepo, types.GlobalsBotConfig.GetRepoName(), types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.GetOrgCommand()),
-		types.RetryShell(fmt.Sprintf(checkRepo, types.GlobalsBotConfig.GetRepoName())),
-		types.RetryShell(fmt.Sprintf(cloneRepo, types.GlobalsBotConfig.GetRepoName())),
+		utils.RetryShell(fmt.Sprintf(checkRepo, types.GlobalsBotConfig.GetRepoName())),
+		utils.RetryShell(fmt.Sprintf(cloneRepo, types.GlobalsBotConfig.GetRepoName())),
 		fmt.Sprintf(configEmail, types.GlobalsBotConfig.GetEmail()),
 		fmt.Sprintf(configUser, types.GlobalsBotConfig.GetUsername()),
-		types.SecretShell(fmt.Sprintf(setToken, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetRepoName())),
-		types.SecretShell(fmt.Sprintf(gitAddRemote, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetForkName())),
+		utils.SecretShell(fmt.Sprintf(setToken, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetRepoName())),
+		utils.SecretShell(fmt.Sprintf(gitAddRemote, types.GlobalsBotConfig.GetUsername(), types.GlobalsBotConfig.GetToken(), types.GlobalsBotConfig.GetForkName())),
 		fmt.Sprintf(syncRepo),
 	}
-	if err := types.ExecShellForAny(types.GlobalsBotConfig.GetToken())(shells); err != nil {
+	if err := utils.ExecShellForAny(types.GlobalsBotConfig.GetToken())(shells); err != nil {
 		logger.Error("setPreGithub err:%v", err)
 		return err
 	}

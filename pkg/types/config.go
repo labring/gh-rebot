@@ -47,8 +47,16 @@ type Release struct {
 	AllowOps []string `json:"allowOps"`
 }
 
+type Type string
+
+const (
+	TypeAction  Type = "action"
+	TypeWebhook Type = "webhook"
+)
+
 type Config struct {
 	Version string            `json:"version"`
+	Type    string            `json:"type"`
 	Debug   bool              `json:"debug"`
 	Bot     Bot               `json:"bot"`
 	Repo    Repo              `json:"repo"`
@@ -56,31 +64,6 @@ type Config struct {
 	Token   string            `json:"-"`
 
 	Release *Release `json:"release,omitempty"`
-}
-
-func (r *Config) Validate() error {
-	if r.Bot.Username == "" {
-		return fmt.Errorf("bot username is required")
-	}
-	if r.Bot.Email == "" {
-		return fmt.Errorf("bot email is required")
-	}
-	if r.GetRepoName() == "" {
-		return fmt.Errorf("repo name is required")
-	}
-	if r.GetForkName() == "" {
-		return fmt.Errorf("repo fork is required")
-	}
-	if r.Release != nil {
-		if r.Release.Action == "" {
-			return fmt.Errorf("release action is required")
-		}
-		if r.Release.Retry == "" {
-			return fmt.Errorf("release retry is required")
-		}
-	}
-
-	return nil
 }
 
 // GetPrefix returns the prefix for the bot

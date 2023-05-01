@@ -18,11 +18,52 @@ package utils
 
 import (
 	"fmt"
+	"github.com/cenkalti/backoff/v4"
 	"github.com/cuisongliu/logger"
 	"os"
 	"os/exec"
 	"strings"
+	"time"
 )
+
+type RetryShell string
+type RetrySecretShell string
+type SecretShell string
+
+func ExecShellForAny(secrets ...string) func(shells []any) error {
+	return func(shells []any) error {
+		// 设置重试策略
+		exponentialBackoff := backoff.NewExponentialBackOff()
+		exponentialBackoff.MaxElapsedTime = 15 * time.Second
+		for _, sh := range shells {
+			if s, ok := sh.(RetryShell); ok {
+				if err := backoff.Retry(func() error {
+					return RunCommand("bash", "-c", string(s))
+				}, exponentialBackoff); err != nil {
+					return err
+				}
+			}
+			if s, ok := sh.(RetrySecretShell); ok {
+				if err := backoff.Retry(func() error {
+					return RunCommandInSecret(string(s), secrets)
+				}, exponentialBackoff); err != nil {
+					return err
+				}
+			}
+			if s, ok := sh.(SecretShell); ok {
+				if err := RunCommandInSecret(string(s), secrets); err != nil {
+					return err
+				}
+			}
+			if s, ok := sh.(string); ok {
+				if err := RunCommand("bash", "-c", s); err != nil {
+					return err
+				}
+			}
+		}
+		return nil
+	}
+}
 
 func RunCommand(command string, args ...string) error {
 	logger.Debug("Running command: %s %s", command, strings.Join(args, " "))

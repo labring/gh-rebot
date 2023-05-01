@@ -18,6 +18,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"os"
 	"strings"
@@ -38,9 +39,29 @@ func ParseConfig(filePath string) (*Config, error) {
 	}
 	if token, ok := os.LookupEnv("GH_TOKEN"); ok {
 		config.Token = token
+	} else {
+		return nil, errors.New("error: GH_TOKEN is not set. Please set the GH_TOKEN environment variable to enable authentication and access to the GitHub API")
 	}
-	if config.Repo.Org {
-		config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])
+
+	if config.Type == "" {
+		config.Type = TypeAction
+	}
+
+	switch config.Type {
+	case TypeAction:
+		GlobalsGithubVar, err = ghEnvToVar()
+		if err != nil {
+			return nil, err
+		}
+		if config.Repo.Org {
+			config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])
+		}
+	case TypeWebhook:
+
+	}
+
+	if err = config.validate(); err != nil {
+		return nil, err
 	}
 	return config, nil
 }

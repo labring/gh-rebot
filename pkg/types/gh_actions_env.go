@@ -43,7 +43,7 @@ func (g *GithubVar) GetRunnerURL() string {
 	return runnerURL
 }
 
-func GetGHEnvToVar() (*GithubVar, error) {
+func ghEnvToVar() (*GithubVar, error) {
 	gVar := new(GithubVar)
 	gVar.RunnerID = os.Getenv("GITHUB_RUN_ID")
 	//gVar.SafeRepo = os.Getenv("GITHUB_REPOSITORY")
@@ -70,5 +70,8 @@ func GetGHEnvToVar() (*GithubVar, error) {
 		user, _, _ = unstructured.NestedString(mData, "comment", "user", "login")
 	}
 	gVar.SenderOrCommentUser = user
+	if err := gVar.validate(); err != nil {
+		return nil, err
+	}
 	return gVar, nil
 }
