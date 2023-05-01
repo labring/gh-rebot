@@ -16,7 +16,15 @@ limitations under the License.
 
 package utils
 
-import "testing"
+import (
+	"testing"
+)
+
+func TestExecShellForAny(t *testing.T) {
+	if err := ExecShellForAny()([]any{RetryShell("rm -rf /tmp/fork-sealos-repo && gh repo clone labring/sealos1 /tmp/fork-sealos-repo")}); err != nil {
+		t.Errorf("ExecShellForAny() error = %v", err)
+	}
+}
 
 func TestRunCommandWithOutput(t *testing.T) {
 	out, err := RunCommandWithOutput("cd /tmp/fork-sealos-repo && gh run list --workflow Release --json name,number,status,url,event,conclusion -q '.[0]'", false)
