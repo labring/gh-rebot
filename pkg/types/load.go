@@ -49,7 +49,7 @@ func ParseConfig(filePath string) (*Config, error) {
 
 	switch config.Type {
 	case TypeAction:
-		GlobalsGithubVar, err = ghEnvToVar()
+		ActionConfigJSON, err = ghEnvToVar()
 		if err != nil {
 			return nil, err
 		}

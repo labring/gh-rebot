@@ -5,6 +5,7 @@ package cmd
 
 import (
 	"github.com/cuisongliu/logger"
+	"github.com/labring/gh-rebot/pkg/setup"
 	"github.com/labring/gh-rebot/pkg/webhook"
 
 	"github.com/spf13/cobra"
@@ -23,7 +24,7 @@ var webhookCmd = &cobra.Command{
 
 func init() {
 	cobra.OnInitialize(func() {
-		checkToken()
+		setup.Setup(cfgFile)
 	})
 	rootCmd.AddCommand(webhookCmd)
 

@@ -1,0 +1,9 @@
+name: "Gh Rebot for Sealos"
+description: "Add some rebot command for sealos"
+author: "cuisongliu"
+runs:
+  using: 'docker'
+  image: 'Dockerfile'
+branding:
+  icon: 'git-pull-request'
+  color: 'green'

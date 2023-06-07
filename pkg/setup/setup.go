@@ -14,9 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package types
+package setup
 
-var (
-	GlobalsBotConfig *Config
-	ActionConfigJSON *GithubVar
+import (
+	"github.com/cuisongliu/logger"
+	"github.com/labring/gh-rebot/pkg/types"
+	"os"
 )
+
+func Setup(cfgFile string) {
+	var err error
+	logger.Debug("github env to var: %v", types.ActionConfigJSON)
+	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
+	if err != nil {
+		logger.Error(err)
+		os.Exit(1)
+	}
+	logger.Cfg(types.GlobalsBotConfig.GetDebug(), false)
+}

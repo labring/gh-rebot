@@ -14,21 +14,21 @@ See the License for the specific language governing permissions and
 limitations under the License.
 */
 
-package cmd
+package github_go
 
 import (
-	"github.com/cuisongliu/logger"
+	"context"
+	"github.com/google/go-github/v39/github"
 	"github.com/labring/gh-rebot/pkg/types"
-	"os"
+	"golang.org/x/oauth2"
 )
 
-func checkToken() {
-	var err error
-	logger.Debug("github env to var: %v", types.GlobalsGithubVar)
-	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
-	if err != nil {
-		logger.Error(err)
-		os.Exit(1)
-	}
-	logger.Cfg(types.GlobalsBotConfig.GetDebug(), false)
+func GithubClient(ctx context.Context) *github.Client {
+	// 替换为你的GitHub Token
+	token := types.GlobalsBotConfig.Token
+
+	// 创建GitHub客户端
+	ts := oauth2.StaticTokenSource(&oauth2.Token{AccessToken: token})
+	tc := oauth2.NewClient(ctx, ts)
+	return github.NewClient(tc)
 }

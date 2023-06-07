@@ -23,7 +23,7 @@ import (
 )
 
 func checkPermission(extras []string) error {
-	tigger := types.GlobalsGithubVar.SenderOrCommentUser
+	tigger := types.ActionConfigJSON.SenderOrCommentUser
 	if tigger == "" {
 		return errors.New("Error: github sender or workflow is empty.")
 	}
