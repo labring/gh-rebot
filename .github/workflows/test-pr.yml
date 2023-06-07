@@ -15,3 +15,4 @@ jobs:
           SEALOS_TYPE: "pr_comment"
           SEALOS_FILENAME: "templates/template.md"
           REPLACE_TAG: "DEFAULT"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"

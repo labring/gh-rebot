@@ -1,16 +1,9 @@
-FROM golang:1.20-alpine AS builder
-WORKDIR /app
-
-COPY go.mod go.sum ./
-COPY . .
-
-RUN go mod download
-
-RUN CGO_ENABLED=0 GOOS=linux go build -a -o gh-rebot .
-
 FROM alpine:3.16.2
-
+ENV GH_REBOT_VERSION=v0.0.6-rc3
 COPY --from=builder /app/gh-rebot /app/
 MAINTAINER "Sealos Inc."
 RUN apk --no-cache add jq bash curl git git-lfs github-cli
-ENTRYPOINT ["/app/gh-rebot","action"]
+RUN  wget -q https://github.com/labring/gh-rebot/releases/download/${GH_REBOT_VERSION}/gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz && \
+     tar -zxf gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz gh-rebot &&  chmod +x gh-rebot && mv gh-rebot /usr/bin/gh-rebot && \
+     gh-rebot version
+ENTRYPOINT ["gh-rebot","action"]

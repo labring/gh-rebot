@@ -3,8 +3,6 @@ on:
   issue_comment:
     types:
       - created
-env:
-  GH_TOKEN: "${{ secrets.GH_PAT }}"
 jobs:
   comment:
     if: startswith(github.event.comment.body, '/')
@@ -16,3 +14,4 @@ jobs:
         if: ${{ (github.event_name != 'push') }}
         env:
           SEALOS_TYPE: "/comment"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"
