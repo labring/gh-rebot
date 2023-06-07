@@ -67,7 +67,7 @@ func ghEnvToVar() (*GithubVar, error) {
 
 	user, ok, _ := unstructured.NestedString(mData, "comment", "user", "login")
 	if !ok {
-		user, _, _ = unstructured.NestedString(mData, "comment", "user", "login")
+		user, _, _ = unstructured.NestedString(mData, "sender", "login")
 	}
 	gVar.SenderOrCommentUser = user
 	if err := gVar.validate(); err != nil {

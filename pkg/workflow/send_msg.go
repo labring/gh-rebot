@@ -52,10 +52,10 @@ func SendMsgToIssue(msg string, actionURL ...string) error {
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
-			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
+			"IssueOrPRNumber": types.ActionConfigJSON.IssueOrPRNumber,
 			"Msg":             msg,
-			"GetRunnerURL":    types.GlobalsGithubVar.GetRunnerURL(),
-			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
+			"GetRunnerURL":    types.ActionConfigJSON.GetRunnerURL(),
+			"SafeRepo":        types.ActionConfigJSON.SafeRepo,
 			"ActionURLs":      actionURL,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
@@ -69,9 +69,9 @@ func SendCustomizeMsgToIssue(msg string) error {
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
-			"IssueOrPRNumber": types.GlobalsGithubVar.IssueOrPRNumber,
+			"IssueOrPRNumber": types.ActionConfigJSON.IssueOrPRNumber,
 			"Msg":             msg,
-			"SafeRepo":        types.GlobalsGithubVar.SafeRepo,
+			"SafeRepo":        types.ActionConfigJSON.SafeRepo,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
 	}

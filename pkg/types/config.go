@@ -33,14 +33,6 @@ type Repo struct {
 	Fork       string `json:"fork"`
 }
 
-type Changelog struct {
-	AllowOps  []string `json:"allowOps"`
-	Reviewers []string `json:"reviewers"`
-	Script    string   `json:"script"`
-	Title     string   `json:"title"`
-	Body      string   `json:"body"`
-}
-
 type Release struct {
 	Retry    string   `json:"retry"`
 	Action   string   `json:"action"`
@@ -105,7 +97,7 @@ func (r *Config) GetOrgCommand() string {
 // GetRepoName returns the name for the repo
 func (r *Config) GetRepoName() string {
 	if r.Repo.Name == "" {
-		r.Repo.Name = fmt.Sprintf("%s/%s", r.Bot.Username, GlobalsGithubVar.RepoName)
+		r.Repo.Name = fmt.Sprintf("%s/%s", r.Bot.Username, ActionConfigJSON.RepoName)
 	}
 	return r.Repo.Name
 }
@@ -113,7 +105,7 @@ func (r *Config) GetRepoName() string {
 // GetForkName returns the fork for the repo
 func (r *Config) GetForkName() string {
 	if r.Repo.Fork == "" {
-		r.Repo.Fork = GlobalsGithubVar.SafeRepo
+		r.Repo.Fork = ActionConfigJSON.SafeRepo
 	}
 	return r.Repo.Fork
 }
