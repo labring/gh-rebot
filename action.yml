@@ -1,9 +1,22 @@
 name: "Gh Rebot for Sealos"
 description: "Add some rebot command for sealos"
 author: "cuisongliu"
+inputs:
+  version:
+    description: 'version of gh-rebot'
+    required: true
+    default: 'v0.0.5'
 runs:
-  using: 'docker'
-  image: 'ActionDockerfile'
+  using: "composite"
+  steps:
+  - run: |
+      sudo wget -q https://github.com/labring/gh-rebot/releases/download/${GH_REBOT_VERSION}/gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz
+      sudo tar -zxf gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz gh-rebot &&  chmod +x gh-rebot && sudo mv gh-rebot /usr/bin/gh-rebot
+      gh-rebot version
+      sudo rm -rf gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz
+    shell: bash
+    env:
+      GH_REBOT_VERSION: ${{ inputs.version }}
 branding:
-  icon: 'git-pull-request'
-  color: 'green'
+  icon: 'user-check'
+  color: 'orange'
