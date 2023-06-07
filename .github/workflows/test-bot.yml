@@ -5,7 +5,7 @@ on:
       - created
 jobs:
   comment:
-    if: startswith(github.event.comment.body, '/xx')
+    if: startswith(github.event.comment.body, '/test')
     runs-on: ubuntu-latest
     steps:
       - name: Set up Go 1.x
