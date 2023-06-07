@@ -1,0 +1,17 @@
+name: Github Rebot for Sealos PR
+
+on:
+  - push
+  - pull_request_target
+
+jobs:
+  linkChecker:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - uses: labring/gh-rebot@v0.0.6-rc1
+        if: ${{ (github.event_name != 'push') }}
+        env:
+          SEALOS_TYPE: "pr_comment"
+          SEALOS_FILENAME: "templates/template.md"
+          REPLACE_TAG: "DEFAULT"
