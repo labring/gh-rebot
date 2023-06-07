@@ -29,6 +29,7 @@ jobs:
       - uses: docker/setup-buildx-action@4b4e9c3e2d4531116a6f8ba8e71fc6e2cb6e6c8c # v2
       - name: Login to GitHub Container Registry
         uses: docker/login-action@v2
+        if: ${{ (github.event_name == 'push') }}
         with:
           registry: ghcr.io
           username: ${{ github.repository_owner }}
@@ -39,11 +40,21 @@ jobs:
       - name: Expose git commit data
         uses: rlespinasse/git-commit-data-action@v1
       - name: build (and publish) main image
+        if: ${{ (github.event_name == 'push') }}
         run: |
           docker buildx build \
           --platform linux/amd64 \
           --label "org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/gh-rebot" \
           --push \
+          -t ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }} \
+          -f Dockerfile \
+          .
+      - name: build  main image
+        if: ${{ (github.event_name != 'push') }}
+        run: |
+          docker buildx build \
+          --platform linux/amd64 \
+          --label "org.opencontainers.image.source=https://github.com/${{ github.repository_owner }}/gh-rebot" \
           -t ghcr.io/${{ github.repository_owner }}/gh-rebot:${{ env.GIT_COMMIT_SHORT_SHA }} \
           -f Dockerfile \
           .
