@@ -3,7 +3,7 @@ description: "Add some rebot command for sealos"
 author: "cuisongliu"
 runs:
   using: 'docker'
-  image: 'Dockerfile'
+  image: 'ActionDockerfile'
 branding:
   icon: 'git-pull-request'
   color: 'green'

@@ -1,0 +1,17 @@
+name: Github Rebot for Sealos test comment
+on:
+  issue_comment:
+    types:
+      - created
+env:
+  GH_TOKEN: "${{ secrets.GH_PAT }}"
+jobs:
+    if: startswith(github.event.comment.body, '/')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the latest code
+        uses: actions/checkout@v3
+      - uses: labring/gh-rebot@v0.0.6-rc2
+        if: ${{ (github.event_name != 'push') }}
+        env:
+          SEALOS_TYPE: "/comment"

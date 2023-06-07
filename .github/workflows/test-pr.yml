@@ -1,4 +1,4 @@
-name: Github Rebot for Sealos PR
+name: Github Rebot for Sealos test PR
 
 on:
   - push
@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: labring/gh-rebot@v0.0.6-rc1
+      - uses: labring/gh-rebot@v0.0.6-rc2
         if: ${{ (github.event_name != 'push') }}
         env:
           SEALOS_TYPE: "pr_comment"
