@@ -1,0 +1,10 @@
+- [Private][IssueComment] https://github.com/caicloud/engineering/issues/7668 2019-05-23 daily plan [clever]
+- [Private][IssueComment] https://github.com/caicloud/serving-controller/issues/110 [bug or feature] Unknown in HPA
+- [Public][IssueComment] https://github.com/kubeflow/katib/pull/563 feat(experiment): Add more test cases
+- [Public][IssueComment] https://github.com/kubeflow/katib/pull/569 refactor: Use manager client to get log for test
+- [Public][IssueComment] https://github.com/kubeflow/katib/pull/571 Fix finalizer cannot work
+- [Public][IssueComment] https://github.com/kubeflow/tf-operator/issues/999 Jobs failing when a node is preempted
+- [Public][IssueComment] https://github.com/sjtug/SJTUThesis/pull/419  fix bachelor thesis abstract font size bug
+- [Public][PullRequestReview] https://github.com/kubeflow/katib/pull/569 refactor: Use manager client to get log for test
+- [Public][PullRequest] https://github.com/caicloud/katib/pull/8 feat: Support grid
+- [Public][PullRequest] https://github.com/sjtug/SJTUThesis/pull/419  fix bachelor thesis abstract font size bug
