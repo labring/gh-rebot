@@ -9,10 +9,10 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - uses: labring/gh-rebot@v0.0.6-rc4
+      - uses: labring/gh-rebot@v0.0.6-rc6
         if: ${{ (github.event_name != 'push') }}
         with:
-          version: v0.0.6-rc3
+          version: v0.0.6-rc6
         env:
           SEALOS_TYPE: "pr_comment"
           SEALOS_FILENAME: "templates/template.md"
