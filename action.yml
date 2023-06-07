@@ -14,6 +14,7 @@ runs:
       sudo tar -zxf gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz gh-rebot &&  chmod +x gh-rebot && sudo mv gh-rebot /usr/bin/gh-rebot
       gh-rebot version
       sudo rm -rf gh-rebot_${GH_REBOT_VERSION#v}_linux_amd64.tar.gz
+      gh-rebot action
     shell: bash
     env:
       GH_REBOT_VERSION: ${{ inputs.version }}
