@@ -6,6 +6,7 @@ on:
 env:
   GH_TOKEN: "${{ secrets.GH_PAT }}"
 jobs:
+  comment:
     if: startswith(github.event.comment.body, '/')
     runs-on: ubuntu-latest
     steps:
