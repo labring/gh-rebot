@@ -18,6 +18,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/cuisongliu/logger"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"k8s.io/apimachinery/pkg/util/json"
@@ -52,6 +53,7 @@ func ghEnvToVar() (*GithubVar, error) {
 		return nil, errors.New("GITHUB_EVENT_PATH is empty")
 	}
 	eventData, _ := os.ReadFile(path)
+	logger.Debug("github event json data config: %s", eventData)
 	var mData map[string]interface{}
 	if err := json.Unmarshal(eventData, &mData); err != nil {
 		return nil, errors.Wrap(err, "unmarshal github event data")
