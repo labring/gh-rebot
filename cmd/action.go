@@ -22,6 +22,7 @@ var actionCmd = &cobra.Command{
 			logger.Error(err)
 			os.Exit(1)
 		}
+		logger.Debug("action type is ", actionType)
 		switch actionType {
 		case "/comment":
 			err = action.CommentEngine()
