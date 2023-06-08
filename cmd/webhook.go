@@ -20,12 +20,12 @@ var webhookCmd = &cobra.Command{
 			logger.Fatal(err, "unable to init http server")
 		}
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		setup.Setup(cfgFile)
+	},
 }
 
 func init() {
-	cobra.OnInitialize(func() {
-		setup.Setup(cfgFile)
-	})
 	rootCmd.AddCommand(webhookCmd)
 
 	// Here you will define your flags and configuration settings.
