@@ -13,14 +13,9 @@ jobs:
         with:
           go-version: 1.20.x
       - uses: actions/checkout@v3
-      - name: Run GoReleaser
-        uses: goreleaser/goreleaser-action@v1
-        with:
-          version: latest
-          args: build --snapshot --clean  --timeout=1h
-      - name: Copy file
+      - name: Build file
         run: |
-          sudo cp dist/gh-rebot_linux_amd64_v1/gh-rebot  /usr/bin/gh-rebot
+          make install
       - run: |
           gh-rebot action
         env:
