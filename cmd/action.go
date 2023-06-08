@@ -36,12 +36,12 @@ var actionCmd = &cobra.Command{
 			os.Exit(1)
 		}
 	},
+	PreRun: func(cmd *cobra.Command, args []string) {
+		setup.Setup(cfgFile)
+	},
 }
 
 func init() {
-	cobra.OnInitialize(func() {
-		setup.Setup(cfgFile)
-	})
 	rootCmd.AddCommand(actionCmd)
 
 	// Here you will define your flags and configuration settings.

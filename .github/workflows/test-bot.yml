@@ -21,8 +21,7 @@ jobs:
       - name: Copy file
         run: |
           sudo cp dist/gh-rebot_linux_amd64_v1/gh-rebot  /usr/bin/gh-rebot
-      - if: ${{ (github.event_name != 'push') }}
-        run: |
+      - run: |
           gh-rebot action
         env:
           SEALOS_TYPE: "/comment"
