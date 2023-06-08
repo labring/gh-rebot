@@ -48,6 +48,7 @@ const (
 
 type Action struct {
 	PrintConfig bool `json:"printConfig"`
+	//Release     *Release `json:"release,omitempty"`
 }
 
 type Config struct {

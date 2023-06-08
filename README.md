@@ -11,6 +11,8 @@ version: v1
 debug: true
 bot:
   prefix: /sealos
+  action:
+    printConfig: true
   spe: _
   allowOps:
     - sealos-ci-robot
@@ -44,6 +46,8 @@ message:
 
 - `version` - 版本标识，当前为 v1。
 - `debug` - 是否开启调试模式，设置为 true 时开启。
+- `action` \- action配置。
+   - `printConfig` - 是否打印配置信息，设置为 true 时打印。
 - `bot` \- 机器人配置。
    - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/`,如果设置为`/` 则 `spe` 失效。命令为`/release`
    - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
