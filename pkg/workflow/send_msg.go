@@ -48,14 +48,14 @@ func (s *sender) sendCommentMsgToIssue(msg string) error {
 }
 
 func SendMsgToIssue(msg string, actionURL ...string) error {
-	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}} <br/>See: <br/>- {{.GetRunnerURL}}{{range .ActionURLs}}<br/>- {{.}}{{end}}" --repo {{.SafeRepo}}`)
+	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}} <br/>See: <br/>- {{.GetRunnerURL}}{{range .ActionURLs}}<br/>- {{.}}{{end}}" --repo {{.RepoFullName}}`)
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
 			"IssueOrPRNumber": types.ActionConfigJSON.IssueOrPRNumber,
 			"Msg":             msg,
 			"GetRunnerURL":    types.ActionConfigJSON.GetRunnerURL(),
-			"SafeRepo":        types.ActionConfigJSON.SafeRepo,
+			"RepoFullName":    types.ActionConfigJSON.RepoFullName,
 			"ActionURLs":      actionURL,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
@@ -65,13 +65,13 @@ func SendMsgToIssue(msg string, actionURL ...string) error {
 }
 
 func SendCustomizeMsgToIssue(msg string) error {
-	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}}" --repo {{.SafeRepo}}`)
+	tpl, ok, _ := template.TryParse(`gh issue comment {{.IssueOrPRNumber}} --body "{{.Msg}}" --repo {{.RepoFullName}}`)
 	if ok {
 		out := bytes.NewBuffer(nil)
 		_ = tpl.Execute(out, map[string]interface{}{
 			"IssueOrPRNumber": types.ActionConfigJSON.IssueOrPRNumber,
 			"Msg":             msg,
-			"SafeRepo":        types.ActionConfigJSON.SafeRepo,
+			"RepoFullName":    types.ActionConfigJSON.RepoFullName,
 		})
 		return utils.RunCommand("bash", "-c", out.String())
 	}

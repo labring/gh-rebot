@@ -97,6 +97,26 @@ message:
 在遇到错误时，请根据提示信息进行相应的调整。
 
 
+### 如何使用Action
+
+```yaml
+- name: Gh Rebot for Sealos
+  uses: labring/gh-rebot@v0.0.6-rc6
+  with:
+    version: v0.0.6-rc6
+  env:
+    SEALOS_TYPE: "/comment"
+    GH_TOKEN: "${{ secrets.GH_PAT }}"
+```
+
+- [x] 支持release
+  `SEALOS_TYPE: "/comment"` # 评论触发
+
+- [x] 支持PR文本替换回复
+  - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
+  - `SEALOS_filename: "README.md"` # PR文本替换回复文件位置
+  - `SEALOS_replace_tag: "TAG"` # 寻找标记，根据这个标记进行替换
+
 ## Roadmap
 
 - [ ] 支持label操作

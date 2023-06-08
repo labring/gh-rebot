@@ -50,7 +50,7 @@ func ParseConfig(filePath string) (*Config, error) {
 
 	switch config.Type {
 	case TypeAction:
-		ActionConfigJSON, err = ghEnvToVar()
+		ActionConfigJSON, err = ghEnvToVar(config.Action)
 		if err != nil {
 			return nil, err
 		}
@@ -58,7 +58,7 @@ func ParseConfig(filePath string) (*Config, error) {
 			config.Repo.OrgCommand = fmt.Sprintf(" --org  %s ", strings.SplitN(config.GetRepoName(), "/", 2)[0])
 		}
 	case TypeWebhook:
-
+		logger.Warn("webhook mode is not supported yet")
 	}
 
 	if err = config.validate(); err != nil {
