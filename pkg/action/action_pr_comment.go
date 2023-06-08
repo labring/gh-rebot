@@ -80,8 +80,9 @@ func PRComment() error {
 		return fmt.Errorf("Issues.ListComments returned error: %v", err)
 	}
 	hiddenReplace := fmt.Sprintf("<!-- %s -->", replaceTag)
+	content := string(fileContent) + "\n" + hiddenReplace
 	createComment := func() {
-		comment := &github.IssueComment{Body: github.String(string(fileContent))}
+		comment := &github.IssueComment{Body: github.String(content)}
 		client.Issues.CreateComment(ctx, owner, repo, prNumber, comment)
 	}
 	if hiddenReplace == "" {
@@ -91,11 +92,11 @@ func PRComment() error {
 	}
 	for _, comment := range comments {
 		if comment.Body != nil && comment.ID != nil {
-			if *comment.Body == string(fileContent) {
+			if *comment.Body == content {
 				logger.Info("The comment %d has been already added to the pull request. Skipping...", *comment.ID)
 				return nil
 			} else if hiddenReplace != "" && strings.LastIndex(*comment.Body, hiddenReplace) != -1 {
-				client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(string(fileContent))})
+				client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(content)})
 				return nil
 			}
 		}
