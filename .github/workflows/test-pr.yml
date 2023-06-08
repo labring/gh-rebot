@@ -24,3 +24,14 @@ jobs:
           SEALOS_FILENAME: "templates/template.md"
           SEALOS_REPLACE_TAG: "DEFAULT"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
+      - name: add file
+        run: |
+          echo "somethings....." >> templates/template.md
+      - if: ${{ (github.event_name != 'push') }}
+        run: |
+          gh-rebot action
+        env:
+          SEALOS_TYPE: "pr_comment"
+          SEALOS_FILENAME: "templates/template.md"
+          SEALOS_REPLACE_TAG: "DEFAULT"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"
