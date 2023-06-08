@@ -111,6 +111,7 @@ message:
     SEALOS_TYPE: "/comment"
     GH_TOKEN: "${{ secrets.GH_PAT }}"
 ```
+**版本支持**: 支持v0.0.6-rc6及以上版本
 
 - [x] 支持release
   `SEALOS_TYPE: "/comment"` # 评论触发

@@ -19,12 +19,6 @@ bot:
 repo:
   org: false
 
-release:
-  retry: 15s
-  action: Release
-  allowOps:
-    - cuisongliu
-
 message:
   success: |
     🤖 says: Hooray! The action {{.Body}} has been completed successfully. 🎉
