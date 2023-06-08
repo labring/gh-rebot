@@ -35,7 +35,7 @@ type ActionOut struct {
 }
 
 func CheckRelease(tagName string) (*ActionOut, error) {
-	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.Release.Action, tagName), true)
+	workflowOutput, _ := utils.RunCommandWithOutput(fmt.Sprintf(gitWorkflowCheck, types.GlobalsBotConfig.GetForkName(), types.GlobalsBotConfig.Action.Release.ActionName, tagName), true)
 	if workflowOutput == "" || strings.Contains(workflowOutput, "could not find any workflows named") {
 		time.Sleep(5 * time.Second)
 		return CheckRelease(tagName)
@@ -52,7 +52,7 @@ func CheckRelease(tagName string) (*ActionOut, error) {
 		out.IsSuccess = false
 		return &out, nil
 	} else {
-		tt, err := time.ParseDuration(types.GlobalsBotConfig.Release.Retry)
+		tt, err := time.ParseDuration(types.GlobalsBotConfig.Action.Release.Retry)
 		if err != nil {
 			tt = time.Second * 20
 		}

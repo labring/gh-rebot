@@ -31,7 +31,7 @@ func CommentEngine() error {
 	for _, t := range cmds {
 		logger.Debug("cmds: ", strings.TrimSpace(t))
 		wfs := make([]workflow.Interface, 0)
-		if types.GlobalsBotConfig.Release != nil {
+		if types.GlobalsBotConfig.Action.Release != nil {
 			wfs = append(wfs, workflow.NewRelease(strings.TrimSpace(t)))
 		}
 		used := 0

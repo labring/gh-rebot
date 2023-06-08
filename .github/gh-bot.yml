@@ -2,7 +2,12 @@ version: v1
 debug: true
 type: action
 action:
-  printConfig: true
+  printConfig: false
+  release:
+    retry: 15s
+    actionName: Release
+    allowOps:
+      - cuisongliu
 bot:
   prefix: /
   spe: _

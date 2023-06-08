@@ -33,11 +33,11 @@ func (r *Config) validate() error {
 		if r.GetForkName() == "" {
 			return fmt.Errorf("repo fork is required")
 		}
-		if r.Release != nil {
-			if r.Release.Action == "" {
+		if r.Action.Release != nil {
+			if r.Action.Release.ActionName == "" {
 				return fmt.Errorf("release action is required")
 			}
-			if r.Release.Retry == "" {
+			if r.Action.Release.Retry == "" {
 				return fmt.Errorf("release retry is required")
 			}
 		}

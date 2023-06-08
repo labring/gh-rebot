@@ -34,9 +34,9 @@ type Repo struct {
 }
 
 type Release struct {
-	Retry    string   `json:"retry"`
-	Action   string   `json:"action"`
-	AllowOps []string `json:"allowOps"`
+	Retry      string   `json:"retry"`
+	ActionName string   `json:"actionName"`
+	AllowOps   []string `json:"allowOps"`
 }
 
 type Type string
@@ -47,7 +47,8 @@ const (
 )
 
 type Action struct {
-	PrintConfig bool `json:"printConfig"`
+	PrintConfig bool     `json:"printConfig"`
+	Release     *Release `json:"release,omitempty"`
 }
 
 type Config struct {
@@ -59,8 +60,6 @@ type Config struct {
 	Repo    Repo              `json:"repo"`
 	Message map[string]string `json:"message"`
 	Token   string            `json:"-"`
-
-	Release *Release `json:"release,omitempty"`
 }
 
 // GetPrefix returns the prefix for the bot

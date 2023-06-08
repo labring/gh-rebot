@@ -30,7 +30,7 @@ type release struct {
 }
 
 func (c *release) Run() error {
-	if checkPermission(types.GlobalsBotConfig.Release.AllowOps) != nil {
+	if checkPermission(types.GlobalsBotConfig.Action.Release.AllowOps) != nil {
 		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
