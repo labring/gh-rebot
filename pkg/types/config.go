@@ -110,7 +110,7 @@ func (r *Config) GetRepoName() string {
 // GetForkName returns the fork for the repo
 func (r *Config) GetForkName() string {
 	if r.Repo.Fork == "" {
-		r.Repo.Fork = ActionConfigJSON.SafeRepo
+		r.Repo.Fork = ActionConfigJSON.RepoFullName
 	}
 	return r.Repo.Fork
 }

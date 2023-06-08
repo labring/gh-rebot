@@ -49,11 +49,8 @@ func (t *GithubVar) validate() error {
 	if t.RunnerID == "" {
 		return fmt.Errorf("error: GITHUB_RUN_ID is not set. Please set the GITHUB_RUN_ID environment variable")
 	}
-	if t.SafeRepo == "" {
+	if t.RepoFullName == "" {
 		return fmt.Errorf("error: not found repository.full_name in github event")
-	}
-	if t.CommentBody == "" {
-		return fmt.Errorf("error: not found comment.body in github event")
 	}
 	if t.IssueOrPRNumber == 0 {
 		return fmt.Errorf("error: not found issue.number or pull_request.number in github event")

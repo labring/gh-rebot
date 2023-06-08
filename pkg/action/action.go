@@ -20,12 +20,13 @@ import (
 	"github.com/cuisongliu/logger"
 	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/labring/gh-rebot/pkg/workflow"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"strings"
 )
 
 // CommentEngine is the main function for comment action
 func CommentEngine() error {
-	comment := types.ActionConfigJSON.CommentBody
+	comment, _, _ := unstructured.NestedString(types.ActionConfigJSON.Data, "comment", "body")
 	cmds := strings.Split(comment, "\n")
 	for _, t := range cmds {
 		logger.Debug("cmds: ", strings.TrimSpace(t))

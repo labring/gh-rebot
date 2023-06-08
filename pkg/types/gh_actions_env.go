@@ -28,26 +28,27 @@ import (
 
 type GithubVar struct {
 	RunnerID            string
-	SafeRepo            string
+	RepoFullName        string
 	RepoName            string
+	Owner               string
 	IssueOrPRNumber     int64
-	CommentBody         string
 	SenderOrCommentUser string
+	Data                map[string]interface{}
 }
 
 func (g *GithubVar) String() string {
-	return "RunnerID: " + g.RunnerID + " ;SafeRepo: " + g.SafeRepo + " ;IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " ;CommentBody: " + g.CommentBody + " ;SenderOrCommentUser: " + g.SenderOrCommentUser
+	return "RunnerID: " + g.RunnerID + " ;RepoFullName: " + g.RepoFullName + " ;IssueOrPRNumber: " + strconv.Itoa(int(g.IssueOrPRNumber)) + " ;SenderOrCommentUser: " + g.SenderOrCommentUser
 }
 
 func (g *GithubVar) GetRunnerURL() string {
-	runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", g.SafeRepo, g.RunnerID)
+	runnerURL := fmt.Sprintf("https://github.com/%s/actions/runs/%s", g.RepoFullName, g.RunnerID)
 	return runnerURL
 }
 
 func ghEnvToVar(a Action) (*GithubVar, error) {
 	gVar := new(GithubVar)
 	gVar.RunnerID = os.Getenv("GITHUB_RUN_ID")
-	//gVar.SafeRepo = os.Getenv("GITHUB_REPOSITORY")
+	//gVar.RepoFullName = os.Getenv("GITHUB_REPOSITORY")
 	path := os.Getenv("GITHUB_EVENT_PATH")
 	if path == "" {
 		return nil, errors.New("GITHUB_EVENT_PATH is empty")
@@ -60,14 +61,15 @@ func ghEnvToVar(a Action) (*GithubVar, error) {
 	if err := json.Unmarshal(eventData, &mData); err != nil {
 		return nil, errors.Wrap(err, "unmarshal github event data")
 	}
+	gVar.Data = mData
 	id, ok, _ := unstructured.NestedInt64(mData, "issue", "number")
 	if !ok {
 		id, _, _ = unstructured.NestedInt64(mData, "pull_request", "number")
 	}
 	gVar.IssueOrPRNumber = id
-	gVar.SafeRepo, _, _ = unstructured.NestedString(mData, "repository", "full_name")
+	gVar.RepoFullName, _, _ = unstructured.NestedString(mData, "repository", "full_name")
 	gVar.RepoName, _, _ = unstructured.NestedString(mData, "repository", "name")
-	gVar.CommentBody, _, _ = unstructured.NestedString(mData, "comment", "body")
+	gVar.Owner, _, _ = unstructured.NestedString(mData, "repository", "owner", "login")
 
 	user, ok, _ := unstructured.NestedString(mData, "comment", "user", "login")
 	if !ok {

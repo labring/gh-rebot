@@ -22,8 +22,8 @@ import (
 	"github.com/cuisongliu/logger"
 	"github.com/google/go-github/v39/github"
 	github_go "github.com/labring/gh-rebot/pkg/github-go"
+	"github.com/labring/gh-rebot/pkg/types"
 	"os"
-	"strconv"
 	"strings"
 )
 
@@ -36,24 +36,6 @@ func GetEnvFromAction(key string) (string, error) {
 	return val, nil
 }
 
-func getPrNumber() (int, error) {
-	ref := os.Getenv("GITHUB_REF") // 获取环境变量GITHUB_REF
-	if ref == "" {
-		return 0, fmt.Errorf("not found GITHUB_REF")
-	}
-	split := strings.Split(ref, "/")
-	if len(split) != 4 {
-		return 0, fmt.Errorf("GITHUB_REF format error")
-	}
-	// 获取并转换PR编号
-	prNumberStr := split[2]
-	prNumber, err := strconv.Atoi(prNumberStr)
-	if err != nil {
-		return 0, fmt.Errorf("GITHUB_REF format Atoi error")
-	}
-	return prNumber, nil
-}
-
 func getRepo() (string, string, error) {
 	repo := os.Getenv("GITHUB_REPOSITORY") // 获取环境变量GITHUB_REF
 	if repo == "" {
@@ -63,7 +45,7 @@ func getRepo() (string, string, error) {
 	if len(split) != 2 {
 		return "", "", fmt.Errorf("GITHUB_REPOSITORY format error")
 	}
-	return split[0], split[1], nil
+	return split[0], types.ActionConfigJSON.RepoName, nil
 }
 
 // PRComment is a action to comment on PR
@@ -77,7 +59,7 @@ func PRComment() error {
 		return err
 	}
 
-	prNumber, err := getPrNumber()
+	prNumber := int(types.ActionConfigJSON.IssueOrPRNumber)
 	if err != nil {
 		return err
 	}
