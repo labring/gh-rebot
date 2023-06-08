@@ -46,10 +46,15 @@ const (
 	TypeWebhook Type = "webhook"
 )
 
+type Action struct {
+	PrintConfig bool `json:"printConfig"`
+}
+
 type Config struct {
 	Version string            `json:"version"`
 	Type    Type              `json:"type"`
 	Debug   bool              `json:"debug"`
+	Action  Action            `json:"action"`
 	Bot     Bot               `json:"bot"`
 	Repo    Repo              `json:"repo"`
 	Message map[string]string `json:"message"`
@@ -108,11 +113,6 @@ func (r *Config) GetForkName() string {
 		r.Repo.Fork = ActionConfigJSON.SafeRepo
 	}
 	return r.Repo.Fork
-}
-
-// GetDebug returns the debug for the config
-func (c *Config) GetDebug() bool {
-	return c.Debug
 }
 
 // GetToken returns the token for the config

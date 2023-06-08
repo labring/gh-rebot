@@ -1,6 +1,8 @@
 version: v1
 debug: true
 type: action
+action:
+  printConfig: true
 bot:
   prefix: /
   spe: _

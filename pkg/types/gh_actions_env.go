@@ -44,7 +44,7 @@ func (g *GithubVar) GetRunnerURL() string {
 	return runnerURL
 }
 
-func ghEnvToVar() (*GithubVar, error) {
+func ghEnvToVar(a Action) (*GithubVar, error) {
 	gVar := new(GithubVar)
 	gVar.RunnerID = os.Getenv("GITHUB_RUN_ID")
 	//gVar.SafeRepo = os.Getenv("GITHUB_REPOSITORY")
@@ -53,7 +53,9 @@ func ghEnvToVar() (*GithubVar, error) {
 		return nil, errors.New("GITHUB_EVENT_PATH is empty")
 	}
 	eventData, _ := os.ReadFile(path)
-	logger.Debug("github event json data config: %s", eventData)
+	if a.PrintConfig {
+		logger.Debug("github event json data config: %s", string(eventData))
+	}
 	var mData map[string]interface{}
 	if err := json.Unmarshal(eventData, &mData); err != nil {
 		return nil, errors.Wrap(err, "unmarshal github event data")
