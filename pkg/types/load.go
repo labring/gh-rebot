@@ -18,6 +18,7 @@ package types
 
 import (
 	"fmt"
+	"github.com/cuisongliu/logger"
 	"github.com/pkg/errors"
 	"k8s.io/apimachinery/pkg/util/yaml"
 	"os"
@@ -42,7 +43,7 @@ func ParseConfig(filePath string) (*Config, error) {
 	} else {
 		return nil, errors.New("error: GH_TOKEN is not set. Please set the GH_TOKEN environment variable to enable authentication and access to the GitHub API")
 	}
-
+	logger.Cfg(config.Debug, false)
 	if config.Type == "" {
 		config.Type = TypeAction
 	}

@@ -24,11 +24,10 @@ import (
 
 func Setup(cfgFile string) {
 	var err error
-	logger.Debug("github env to var: %v", types.ActionConfigJSON)
 	types.GlobalsBotConfig, err = types.LoadConfig(cfgFile)
 	if err != nil {
 		logger.Error(err)
 		os.Exit(1)
 	}
-	logger.Cfg(types.GlobalsBotConfig.GetDebug(), false)
+	logger.Debug("github env to var: %v", types.ActionConfigJSON)
 }
