@@ -13,6 +13,11 @@ bot:
   prefix: /sealos
   action:
     printConfig: true
+    release:
+      retry: 15s
+      action: Release
+      allowOps:
+        - cuisongliu
   spe: _
   allowOps:
     - sealos-ci-robot
@@ -23,12 +28,6 @@ repo:
   org: true
   name: labring/sealos
   fork: cuisongliu/sealos
-
-release:
-  retry: 15s
-  action: Release
-  allowOps:
-    - cuisongliu
 
 message:
   success: |
@@ -48,6 +47,10 @@ message:
 - `debug` - 是否开启调试模式，设置为 true 时开启。
 - `action` \- action配置。
    - `printConfig` - 是否打印配置信息，设置为 true 时打印。
+   - `release` \- 发布配置。
+       - `retry` - 重试间隔，例如：15s。
+       - `action` - 执行动作，例如：Release。
+       - `allowOps` - 允许触发发布操作的用户名列表。
 - `bot` \- 机器人配置。
    - `prefix` - 机器人命令前缀，用于识别命令。默认值 `/`,如果设置为`/` 则 `spe` 失效。命令为`/release`
    - `spe` - 机器人命令分隔符，用于识别命令。默认值 `_`
@@ -58,10 +61,6 @@ message:
    - `org` - 是否为组织仓库，设置为 true 时表示是组织仓库。
    - `name` - 仓库名称。
    - `fork` - fork 的仓库名称。
-- `release` \- 发布配置。
-   - `retry` - 重试间隔，例如：15s。
-   - `action` - 执行动作，例如：Release。
-   - `allowOps` - 允许触发发布操作的用户名列表。
 - `message` \- 消息配置。
    - `success` - 成功消息模板。
    - `format_error` - 格式错误消息模板。

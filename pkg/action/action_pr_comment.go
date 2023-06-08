@@ -28,7 +28,7 @@ import (
 )
 
 func GetEnvFromAction(key string) (string, error) {
-	allKey := strings.ToLower("sealos_" + key)
+	allKey := strings.ToUpper("sealos_" + key)
 	val, _ := os.LookupEnv(allKey)
 	if val == "" {
 		return "", fmt.Errorf("not found %s", allKey)
