@@ -26,7 +26,7 @@ jobs:
           GH_TOKEN: "${{ secrets.GH_PAT }}"
       - name: add file
         run: |
-          echo "somethings....." >> templates/template.md
+          echo "somethings.....default" >> templates/template.md
       - if: ${{ (github.event_name != 'push') }}
         run: |
           gh-rebot action
