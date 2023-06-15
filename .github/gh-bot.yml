@@ -2,7 +2,7 @@ version: v1
 debug: true
 type: action
 action:
-  printConfig: false
+  printConfig: true
   release:
     retry: 15s
     actionName: Release
