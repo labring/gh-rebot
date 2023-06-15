@@ -17,10 +17,12 @@ limitations under the License.
 package action
 
 import (
+	"fmt"
 	"github.com/cuisongliu/logger"
 	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/labring/gh-rebot/pkg/workflow"
 	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
+	"os"
 	"strings"
 )
 
@@ -48,4 +50,25 @@ func CommentEngine() error {
 		}
 	}
 	return nil
+}
+
+func GetEnvFromAction(key string) (string, error) {
+	allKey := strings.ToUpper("sealos_" + key)
+	val, _ := os.LookupEnv(allKey)
+	if val == "" {
+		return "", fmt.Errorf("not found %s", allKey)
+	}
+	return val, nil
+}
+
+func getRepo() (string, string, error) {
+	repo := os.Getenv("GITHUB_REPOSITORY") // 获取环境变量GITHUB_REF
+	if repo == "" {
+		return "", "", fmt.Errorf("not found GITHUB_REPOSITORY")
+	}
+	split := strings.Split(repo, "/")
+	if len(split) != 2 {
+		return "", "", fmt.Errorf("GITHUB_REPOSITORY format error")
+	}
+	return split[0], types.ActionConfigJSON.RepoName, nil
 }

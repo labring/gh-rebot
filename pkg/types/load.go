@@ -38,7 +38,7 @@ func ParseConfig(filePath string) (*Config, error) {
 	if err != nil {
 		return nil, err
 	}
-	if token, ok := os.LookupEnv("GH_TOKEN"); ok {
+	if token, ok := os.LookupEnv("GH_TOKEN"); ok && token != "" {
 		config.Token = token
 	} else {
 		return nil, errors.New("error: GH_TOKEN is not set. Please set the GH_TOKEN environment variable to enable authentication and access to the GitHub API")
