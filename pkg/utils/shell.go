@@ -29,6 +29,7 @@ import (
 type RetryShell string
 type RetrySecretShell string
 type SecretShell string
+type SkipShell string
 
 func ExecShellForAny(secrets ...string) func(shells []any) error {
 	return func(shells []any) error {
@@ -55,11 +56,15 @@ func ExecShellForAny(secrets ...string) func(shells []any) error {
 					return err
 				}
 			}
+			if _, ok := sh.(SkipShell); ok {
+				continue
+			}
 			if s, ok := sh.(string); ok {
 				if err := RunCommand("bash", "-c", s); err != nil {
 					return err
 				}
 			}
+
 		}
 		return nil
 	}

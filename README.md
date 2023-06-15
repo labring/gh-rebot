@@ -115,6 +115,11 @@ message:
 
 - [x] 支持release
   `SEALOS_TYPE: "/comment"` # 评论触发
+  example:
+  ```markdown
+   /release v1.2.1
+   /release v1.2.3 release-v1.2
+  ```
 
 - [x] 支持PR文本替换回复
   - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
