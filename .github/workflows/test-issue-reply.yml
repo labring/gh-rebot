@@ -1,0 +1,46 @@
+name: Github Rebot for Sealos test PR
+
+on:
+  issue_comment:
+    types:
+      - created
+
+jobs:
+  linkChecker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20.x
+      - uses: actions/checkout@v3
+      - name: Build file
+        run: |
+          make install
+      - if: startswith(github.event.comment.body, '/comment')
+        run: |
+          gh-rebot action
+        env:
+          SEALOS_TYPE: "issue_comment_reply"
+#          SEALOS_FILENAME: "templates/template.md"
+          SEALOS_COMMENT: "dfffdjh fdhjfhj gfrjghjf"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"
+      - name: using file
+        if: startswith(github.event.comment.body, '/comment')
+        run: |
+          echo "somethings.....default" >> templates/template.md
+      - run: |
+          gh-rebot action
+        if: startswith(github.event.comment.body, '/comment')
+        env:
+          SEALOS_TYPE: "issue_comment_reply"
+          SEALOS_FILENAME: "templates/template.md"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"
+      - run: |
+          gh-rebot action
+        if: startswith(github.event.comment.body, '/reply')
+        env:
+          SEALOS_TYPE: "issue_comment_reply"
+          SEALOS_ISREPLY: "true"
+          SEALOS_FILENAME: "templates/template.md"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"

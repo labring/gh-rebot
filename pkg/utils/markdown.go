@@ -19,9 +19,9 @@ package utils
 import "strings"
 
 func QuoteReply(text string) string {
-	lines := strings.Split(text, "\n")
+	lines := strings.Split(text, "\r\n")
 	for i, line := range lines {
 		lines[i] = "> " + line
 	}
-	return strings.Join(lines, "\n")
+	return strings.Join(lines, "\r\n")
 }

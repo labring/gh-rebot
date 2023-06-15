@@ -27,27 +27,6 @@ import (
 	"strings"
 )
 
-func GetEnvFromAction(key string) (string, error) {
-	allKey := strings.ToUpper("sealos_" + key)
-	val, _ := os.LookupEnv(allKey)
-	if val == "" {
-		return "", fmt.Errorf("not found %s", allKey)
-	}
-	return val, nil
-}
-
-func getRepo() (string, string, error) {
-	repo := os.Getenv("GITHUB_REPOSITORY") // 获取环境变量GITHUB_REF
-	if repo == "" {
-		return "", "", fmt.Errorf("not found GITHUB_REPOSITORY")
-	}
-	split := strings.Split(repo, "/")
-	if len(split) != 2 {
-		return "", "", fmt.Errorf("GITHUB_REPOSITORY format error")
-	}
-	return split[0], types.ActionConfigJSON.RepoName, nil
-}
-
 // PRComment is a action to comment on PR
 func PRComment() error {
 	fileName, err := GetEnvFromAction("filename")

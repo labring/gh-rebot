@@ -28,6 +28,8 @@ var actionCmd = &cobra.Command{
 			err = action.CommentEngine()
 		case "pr_comment":
 			err = action.PRComment()
+		case "issue_comment_reply":
+			err = action.CommentReply()
 		default:
 			err = fmt.Errorf("not support action type")
 		}
