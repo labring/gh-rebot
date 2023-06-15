@@ -111,20 +111,31 @@ message:
     SEALOS_TYPE: "/comment"
     GH_TOKEN: "${{ secrets.GH_PAT }}"
 ```
-**版本支持**: 支持v0.0.6-rc6及以上版本
+**版本支持**: 
 
 - [x] 支持release
+  > 目标分支为`release-v1.2`，如果没有则默认为`main`分支,该功能v0.0.7-rc1支持
+  
   `SEALOS_TYPE: "/comment"` # 评论触发
   example:
   ```markdown
    /release v1.2.1
    /release v1.2.3 release-v1.2 
   ```
-  > 目标分支为`release-v1.2`，如果没有则默认为`main`分支,该功能v0.0.7-rc1支持
+  
 - [x] 支持PR文本替换回复
+  > 该功能v0.0.6 支持
   - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
-  - `SEALOS_filename: "README.md"` # PR文本替换回复文件位置
-  - `SEALOS_replace_tag: "TAG"` # 寻找标记，根据这个标记进行替换
+  - `SEALOS_FILENAME: "README.md"` # PR文本替换回复文件位置
+  - `SEALOS_REPLACE_TAG: "TAG"` # 寻找标记，根据这个标记进行替换
+
+- [x] issue创建comment
+  > 该功能v0.0.7-rc2支持
+  
+  - `SEALOS_TYPE: "issue_comment_reply"` # issue创建comment，支持回复
+  - `SEALOS_FILENAME: "README.md"` # issue内容如果多可以写文件
+  - `SEALOS_COMMENT: "/xxxx"` # comment的内容
+  - `SEALOS_ISREPLY: "true"` # 是否回复，根据当前的comment的内容追加
 
 ## Roadmap
 

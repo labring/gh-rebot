@@ -24,7 +24,9 @@ import (
 	github_go "github.com/labring/gh-rebot/pkg/github-go"
 	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/labring/gh-rebot/pkg/utils"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"os"
+	"strings"
 )
 
 func CommentReply() error {
@@ -45,7 +47,9 @@ func CommentReply() error {
 	}
 
 	if isReply == "true" {
-		comment = utils.QuoteReply(comment)
+		replyBody, _, _ := unstructured.NestedString(types.ActionConfigJSON.Data, "comment", "body")
+		replyBody = utils.QuoteReply(replyBody)
+		comment = strings.Join([]string{replyBody, comment}, "\r\n\r\n")
 	}
 
 	owner, repo, err := getRepo()
