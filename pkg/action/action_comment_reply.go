@@ -53,9 +53,10 @@ func CommentReply() error {
 		return err
 	}
 	logger.Info("repo:%s, issueNumber: %d", repo, issueNumber)
+	logger.Debug("comment: %s", comment)
 	ctx := context.Background()
 	client := github_go.GithubClient(ctx)
 	githubComment := &github.IssueComment{Body: github.String(comment)}
-	client.Issues.CreateComment(ctx, owner, repo, issueNumber, githubComment)
-	return nil
+	_, _, err = client.Issues.CreateComment(ctx, owner, repo, issueNumber, githubComment)
+	return err
 }
