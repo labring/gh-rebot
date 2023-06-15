@@ -118,9 +118,9 @@ message:
   example:
   ```markdown
    /release v1.2.1
-   /release v1.2.3 release-v1.2
+   /release v1.2.3 release-v1.2 
   ```
-
+  > 目标分支为`release-v1.2`，如果没有则默认为`main`分支,该功能v0.0.7-rc1支持
 - [x] 支持PR文本替换回复
   - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
   - `SEALOS_filename: "README.md"` # PR文本替换回复文件位置
