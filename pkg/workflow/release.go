@@ -34,8 +34,12 @@ func (c *release) Run() error {
 		return c.sender.sendMsgToIssue("permission_error")
 	}
 	data := strings.Split(c.Body, " ")
-	if len(data) == 2 && utils.ValidateVersion(data[1]) {
-		err := gh.Tag(data[1])
+	if (2 == len(data) || 3 == len(data)) && utils.ValidateVersion(data[1]) {
+		var newBranch string
+		if len(data) == 3 {
+			newBranch = data[2]
+		}
+		err := gh.Tag(data[1], newBranch)
 		if err != nil {
 			c.sender.Error = err.Error()
 			return c.sender.sendMsgToIssue("release_error")
@@ -53,7 +57,7 @@ func (c *release) Run() error {
 		}
 		return nil
 	} else {
-		logger.Error("command format is error: %s ex. /{prefix}_release {tag}", c.Body)
+		logger.Error("command format is error: %s ex. /{prefix}_release {tag} {branch}", c.Body)
 		return c.sender.sendMsgToIssue("format_error")
 	}
 }

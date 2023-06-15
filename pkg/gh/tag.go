@@ -22,15 +22,22 @@ import (
 	"github.com/pkg/errors"
 )
 
-func Tag(tag string) error {
+func Tag(tag, branch string) error {
 	if err := setPreGithub(); err != nil {
 		return err
+	}
+	var firstShell any
+	if branch == "" {
+		firstShell = utils.SkipShell("")
+	} else {
+		firstShell = fmt.Sprintf(gitCheck, branch)
 	}
 	if ok, err := checkRemoteTagExists(tag); err != nil {
 		return err
 	} else {
 		if !ok {
 			shells := []any{
+				firstShell,
 				fmt.Sprintf(gitNewTag, tag),
 				fmt.Sprintf(gitPushRemote, tag),
 			}

@@ -31,6 +31,7 @@ const (
 	gitCommit        = "cd /tmp/fork-sealos-repo && git commit -am '%s' -s"
 	gitRelease       = "cd /tmp/fork-sealos-repo && git describe --abbrev=0 --tags"
 	gitTag           = "cd /tmp/fork-sealos-repo && git fetch --tags && git tag -l"
+	gitCheck         = "cd /tmp/fork-sealos-repo && git checkout fork/%s"
 	gitNewTag        = "cd /tmp/fork-sealos-repo && git tag %s"
 	gitAddRemote     = "cd /tmp/fork-sealos-repo && git remote add fork https://%s:%s@github.com/%s.git"
 	gitPushRemote    = "cd /tmp/fork-sealos-repo && git push -f fork %s"
