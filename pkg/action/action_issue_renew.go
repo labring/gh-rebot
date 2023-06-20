@@ -67,7 +67,6 @@ func IssueRenew() error {
 
 	issues, _, err := client.Issues.ListByRepo(ctx, owner, repo, &github.IssueListByRepoOptions{
 		Creator: types.GlobalsBotConfig.Bot.Username,
-		Labels:  []string{label},
 	})
 	if err != nil {
 		return err
