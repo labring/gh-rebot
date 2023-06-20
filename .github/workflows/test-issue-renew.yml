@@ -2,7 +2,8 @@ name: Github Rebot for Sealos test issue renew
 
 on:
   workflow_dispatch:
-
+  push:
+    branches: [ "*" ]
 jobs:
   linkChecker:
     runs-on: ubuntu-latest
