@@ -57,16 +57,11 @@ func IssueRenew() error {
 		issueTitle = issueTitle + " " + utils.FormatDay(time.Now())
 	}
 
-	prNumber := int(types.ActionConfigJSON.IssueOrPRNumber)
-	if err != nil {
-		return err
-	}
-
 	owner, repo, err := getRepo()
 	if err != nil {
 		return err
 	}
-	logger.Info("repo:%s, issueTitle: %s, prNumber: %d", repo, issueTitle, prNumber)
+	logger.Info("repo:%s, issueTitle: %s, owner: %s", repo, issueTitle, owner)
 	ctx := context.Background()
 	client := github_go.GithubClient(ctx)
 
