@@ -138,7 +138,7 @@ message:
   - `SEALOS_ISREPLY: "true"` # 是否回复，根据当前的comment的内容追加
 
 - [x] issue自动创建
-  > 该功能v0.0.7-rc2支持
+  > 该功能v0.0.7-rc3支持
 
   入参:
 
