@@ -142,12 +142,12 @@ message:
 
   入参:
 
-  - `SEALOS_TYPE: "issue_renew"` # issue创建comment，支持回复
+  - `SEALOS_TYPE: "issue_renew"` # issue自动创建，支持回复comment
   - `SEALOS_ISSUE_TITLE: "dxxxx"` # issue的title
   - `SEALOS_ISSUE_BODY: "xxxx"` # issue内容
   - `SEALOS_ISSUE_BODYFILE: "README.md"` # issue内容如果多可以写文件
   - `SEALOS_ISSUE_LABEL: "dayly-report"` # 新增issue的label
-  - `SEALOS_ISSUE_TYPE: "day"` # day和week , 会在titles上自动加上日期
+  - `SEALOS_ISSUE_TYPE: "day"` # day和week , 会在titles上自动加上日期,day代表一天一个issue会关闭之前的issue，week以此类推
   - `SEALOS_ISSUE_REPO`: "sealos/sealos" # issue创建的仓库
   - `SEALOS_COMMENT_BODY`: "xxxx" # issue创建后的comment内容
   - `SEALOS_COMMENT_BODYFILE`: "xxxx" # issue创建后的comment内容如果多可以写文件
