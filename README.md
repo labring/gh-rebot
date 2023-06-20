@@ -138,7 +138,7 @@ message:
   - `SEALOS_ISREPLY: "true"` # 是否回复，根据当前的comment的内容追加
 
 - [x] issue自动创建
-  > 该功能v0.0.7支持
+  > 该功能v0.0.8-rc1支持
 
   入参:
 
@@ -148,6 +148,9 @@ message:
   - `SEALOS_ISSUE_BODYFILE: "README.md"` # issue内容如果多可以写文件
   - `SEALOS_ISSUE_LABEL: "dayly-report"` # 新增issue的label
   - `SEALOS_ISSUE_TYPE: "day"` # day和week , 会在titles上自动加上日期
+  - `SEALOS_ISSUE_REPO`: "sealos/sealos" # issue创建的仓库
+  - `SEALOS_COMMENT_BODY`: "xxxx" # issue创建后的comment内容
+  - `SEALOS_COMMENT_BODYFILE`: "xxxx" # issue创建后的comment内容如果多可以写文件
   
   返回参数：
   
