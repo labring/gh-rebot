@@ -19,7 +19,7 @@ jobs:
           gh-rebot action
         env:
           SEALOS_TYPE: "issue_renew"
-          SEALOS_ISSUE_TITLE: "dfffdjh fdhjfhj gfrjghjf"
+          SEALOS_ISSUE_TITLE: "[DaylyReport] Auto build for sealos"
           SEALOS_ISSUE_BODY: "xxxx"
           SEALOS_ISSUE_BODYFILE: "README.md"
           SEALOS_ISSUE_LABEL: "dayly-report"
