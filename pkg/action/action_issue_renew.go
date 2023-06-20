@@ -61,13 +61,13 @@ func IssueRenew() error {
 	if err != nil {
 		return err
 	}
-	logger.Info("repo:%s, issueTitle: %s, owner: %s", repo, issueTitle, owner)
 	ctx := context.Background()
 	client := github_go.GithubClient(ctx)
 
 	issues, _, err := client.Issues.ListByRepo(ctx, owner, repo, &github.IssueListByRepoOptions{
 		Creator: types.GlobalsBotConfig.Bot.Username,
 	})
+	logger.Info("repo:%s, issueTitle: %s, owner: %s, create: %s", repo, issueTitle, owner, types.GlobalsBotConfig.Bot.Username)
 	if err != nil {
 		return err
 	}
