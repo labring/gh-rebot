@@ -24,6 +24,8 @@ import (
 	"github.com/labring/gh-rebot/pkg/types"
 	"github.com/labring/gh-rebot/pkg/utils"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -72,19 +74,28 @@ func IssueRenew() error {
 		return err
 	}
 	hasIssue := false
+	issueId := ""
+	defer func() {
+		writeGithubEnv("SEALOS_ISSUE_ID", issueId)
+		logger.Info("add env SEALOS_ISSUE_ID: %s", issueId)
+	}()
+	issueOldTitle, _ := GetEnvFromAction("issue_title")
 	for _, issue := range issues {
-		logger.Debug("issue: %s, state: %s, id: %d", issue.GetTitle(), issue.GetState(), issue.GetID())
-		if issue.GetTitle() == issueTitle && issue.GetState() != "closed" {
-			logger.Info("issue already exist, issue: %s", issue.GetTitle())
-			hasIssue = true
-			return nil
-		} else {
-			state := "closed"
-			issueRequest := &github.IssueRequest{
-				State: &state,
+		if strings.HasPrefix(issue.GetTitle(), issueOldTitle) {
+			logger.Debug("issue: %s, state: %s, id: %d", issue.GetTitle(), issue.GetState(), issue.GetID())
+			if issue.GetTitle() == issueTitle && issue.GetState() != "closed" {
+				logger.Info("issue already exist, issue: %s", issue.GetTitle())
+				hasIssue = true
+				issueId = strconv.Itoa(int(issue.GetID()))
+				return nil
+			} else {
+				state := "closed"
+				issueRequest := &github.IssueRequest{
+					State: &state,
+				}
+				_, _, _ = client.Issues.Edit(ctx, owner, repo, issue.GetNumber(), issueRequest)
+				logger.Info("close issue: %s", issue.GetTitle())
 			}
-			_, _, _ = client.Issues.Edit(ctx, owner, repo, issue.GetNumber(), issueRequest)
-			logger.Info("close issue: %s", issue.GetTitle())
 		}
 	}
 	logger.Warn("issue not exist, issue: %s", issueTitle)
@@ -96,8 +107,9 @@ func IssueRenew() error {
 				label,
 			},
 		}
-		_, _, _ = client.Issues.Create(ctx, owner, repo, issueRequest)
-		logger.Info("create issue: %s", issueTitle)
+		issue, _, _ := client.Issues.Create(ctx, owner, repo, issueRequest)
+		issueId = strconv.Itoa(int(issue.GetID()))
+		logger.Info("create issue: %s, id: %d", issueTitle, issue.GetID())
 	}
 
 	return nil
