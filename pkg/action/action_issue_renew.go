@@ -79,6 +79,7 @@ func IssueRenew() error {
 	}
 	hasIssue := false
 	for _, issue := range issues {
+		logger.Debug("issue: %s, state: %s, id: %d", issue.GetTitle(), issue.GetState(), issue.GetID())
 		if issue.GetTitle() == issueTitle && issue.GetState() != "closed" {
 			logger.Info("issue already exist, issue: %s", issue.GetTitle())
 			hasIssue = true
