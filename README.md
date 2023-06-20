@@ -140,12 +140,18 @@ message:
 - [x] issue自动创建
   > 该功能v0.0.7-rc2支持
 
+  入参:
+
   - `SEALOS_TYPE: "issue_renew"` # issue创建comment，支持回复
   - `SEALOS_ISSUE_TITLE: "dxxxx"` # issue的title
   - `SEALOS_ISSUE_BODY: "xxxx"` # issue内容
   - `SEALOS_ISSUE_BODYFILE: "README.md"` # issue内容如果多可以写文件
   - `SEALOS_ISSUE_LABEL: "dayly-report"` # 新增issue的label
   - `SEALOS_ISSUE_TYPE: "day"` # day和week , 会在titles上自动加上日期
+  
+  返回参数：
+  
+  - env.SEALOS_ISSUE_NUMBER # issue的number
 
 ## Roadmap
 

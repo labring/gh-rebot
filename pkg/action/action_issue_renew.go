@@ -74,10 +74,10 @@ func IssueRenew() error {
 		return err
 	}
 	hasIssue := false
-	issueId := ""
+	issueNumber := ""
 	defer func() {
-		writeGithubEnv("SEALOS_ISSUE_ID", issueId)
-		logger.Info("add env SEALOS_ISSUE_ID: %s", issueId)
+		writeGithubEnv("SEALOS_ISSUE_NUMBER", issueNumber)
+		logger.Info("add env SEALOS_ISSUE_NUMBER: %s", issueNumber)
 	}()
 	issueOldTitle, _ := GetEnvFromAction("issue_title")
 	for _, issue := range issues {
@@ -86,7 +86,7 @@ func IssueRenew() error {
 			if issue.GetTitle() == issueTitle && issue.GetState() != "closed" {
 				logger.Info("issue already exist, issue: %s", issue.GetTitle())
 				hasIssue = true
-				issueId = strconv.Itoa(int(issue.GetID()))
+				issueNumber = strconv.Itoa(issue.GetNumber())
 				return nil
 			} else {
 				state := "closed"
@@ -108,8 +108,8 @@ func IssueRenew() error {
 			},
 		}
 		issue, _, _ := client.Issues.Create(ctx, owner, repo, issueRequest)
-		issueId = strconv.Itoa(int(issue.GetID()))
-		logger.Info("create issue: %s, id: %d", issueTitle, issue.GetID())
+		issueNumber = strconv.Itoa(issue.GetNumber())
+		logger.Info("create issue: %s, number: %d", issueTitle, issue.GetNumber())
 	}
 
 	return nil
