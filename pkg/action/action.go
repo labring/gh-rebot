@@ -72,3 +72,13 @@ func getRepo() (string, string, error) {
 	}
 	return split[0], types.ActionConfigJSON.RepoName, nil
 }
+
+func writeGithubEnv(key, value string) error {
+	file, err := os.OpenFile(os.Getenv("GITHUB_ENV"), os.O_APPEND|os.O_WRONLY, 0644)
+	if err != nil {
+		return err
+	}
+	defer file.Close()
+	_, err = file.WriteString(fmt.Sprintf("%s=%s\n", key, value))
+	return err
+}
