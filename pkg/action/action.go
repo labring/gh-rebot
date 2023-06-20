@@ -61,7 +61,14 @@ func GetEnvFromAction(key string) (string, error) {
 	return val, nil
 }
 
-func getRepo() (string, string, error) {
+func getRepo(r string) (string, string, error) {
+	if r != "" {
+		split := strings.Split(r, "/")
+		if len(split) != 2 {
+			return "", "", fmt.Errorf("repo format error")
+		}
+		return split[0], split[1], nil
+	}
 	repo := os.Getenv("GITHUB_REPOSITORY") // 获取环境变量GITHUB_REF
 	if repo == "" {
 		return "", "", fmt.Errorf("not found GITHUB_REPOSITORY")

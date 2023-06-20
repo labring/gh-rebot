@@ -52,7 +52,7 @@ func CommentReply() error {
 		comment = strings.Join([]string{replyBody, comment}, "\r\n\r\n")
 	}
 
-	owner, repo, err := getRepo()
+	owner, repo, err := getRepo("")
 	if err != nil {
 		return err
 	}

@@ -58,8 +58,9 @@ func IssueRenew() error {
 	default:
 		issueTitle = issueTitle + " " + utils.FormatDay(time.Now())
 	}
+	issueRepo, _ := GetEnvFromAction("issue_repo")
 
-	owner, repo, err := getRepo()
+	owner, repo, err := getRepo(issueRepo)
 	if err != nil {
 		return err
 	}
