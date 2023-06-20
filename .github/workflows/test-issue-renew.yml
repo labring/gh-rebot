@@ -1,4 +1,4 @@
-name: Github Rebot for Sealos test issue reply
+name: Github Rebot for Sealos test issue renew
 
 on:
   workflow_dispatch:

@@ -8,6 +8,8 @@ import (
 	"github.com/cuisongliu/logger"
 	"github.com/labring/gh-rebot/pkg/action"
 	"github.com/labring/gh-rebot/pkg/setup"
+	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/utils"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -23,6 +25,12 @@ var actionCmd = &cobra.Command{
 			os.Exit(1)
 		}
 		logger.Debug("action type is ", actionType)
+		if !utils.In([]string{"issue_renew"}, actionType) {
+			if err := types.ValidateIssueOrPRNumber(); err != nil {
+				logger.Error(err)
+				os.Exit(1)
+			}
+		}
 		switch actionType {
 		case "/comment":
 			err = action.CommentEngine()
