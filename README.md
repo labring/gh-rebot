@@ -133,9 +133,19 @@ message:
   > 该功能v0.0.7-rc2支持
   
   - `SEALOS_TYPE: "issue_comment_reply"` # issue创建comment，支持回复
-  - `SEALOS_FILENAME: "README.md"` # issue内容如果多可以写文件
+  - `SEALOS_FILENAME: "README.md"` # issue回复内容如果多可以写文件
   - `SEALOS_COMMENT: "/xxxx"` # comment的内容
   - `SEALOS_ISREPLY: "true"` # 是否回复，根据当前的comment的内容追加
+
+- [x] issue自动创建
+  > 该功能v0.0.7-rc2支持
+
+  - `SEALOS_TYPE: "issue_renew"` # issue创建comment，支持回复
+  - `SEALOS_ISSUE_TITLE: "dxxxx"` # issue的title
+  - `SEALOS_ISSUE_BODY: "xxxx"` # issue内容
+  - `SEALOS_ISSUE_BODYFILE: "README.md"` # issue内容如果多可以写文件
+  - `SEALOS_ISSUE_LABEL: "dayly-report"` # 新增issue的label
+  - `SEALOS_ISSUE_TYPE: "day"` # day和week , 会在titles上自动加上日期
 
 ## Roadmap
 

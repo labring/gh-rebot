@@ -1,0 +1,28 @@
+name: Github Rebot for Sealos test issue renew
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [ "*" ]
+jobs:
+  linkChecker:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set up Go 1.x
+        uses: actions/setup-go@v2
+        with:
+          go-version: 1.20.x
+      - uses: actions/checkout@v3
+      - name: Build file
+        run: |
+          make install
+      - run: |
+          gh-rebot action
+        env:
+          SEALOS_TYPE: "issue_renew"
+          SEALOS_ISSUE_TITLE: "[DaylyReport] Auto build for sealos"
+          SEALOS_ISSUE_BODY: "xxxx"
+          SEALOS_ISSUE_BODYFILE: "README.md"
+          SEALOS_ISSUE_LABEL: "dayly-report"
+          SEALOS_ISSUE_TYPE: "day"
+          GH_TOKEN: "${{ secrets.GH_PAT }}"
