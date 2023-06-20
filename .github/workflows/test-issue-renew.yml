@@ -25,6 +25,7 @@ jobs:
           SEALOS_ISSUE_BODYFILE: "README.md"
           SEALOS_ISSUE_LABEL: "dayly-report"
           SEALOS_ISSUE_TYPE: "day"
+          SEALOS_ISSUE_REPO: "labring/gh-rebot"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
       - run: |
           echo "output is ${{ env.SEALOS_ISSUE_NUMBER }}"

@@ -47,7 +47,7 @@ func PRComment() error {
 	if err != nil {
 		return err
 	}
-	owner, repo, err := getRepo()
+	owner, repo, err := getRepo("")
 	if err != nil {
 		return err
 	}
