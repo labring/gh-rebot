@@ -84,8 +84,10 @@ func IssueRenew() error {
 				State: &state,
 			}
 			_, _, _ = client.Issues.Edit(ctx, owner, repo, issue.GetNumber(), issueRequest)
+			logger.Info("close issue: %s", issue.GetTitle())
 		}
 	}
+	logger.Warn("issue not exist, issue: %s", issueTitle)
 	if !hasIssue {
 		issueRequest := &github.IssueRequest{
 			Title: &issueTitle,
@@ -95,6 +97,7 @@ func IssueRenew() error {
 			},
 		}
 		_, _, _ = client.Issues.Create(ctx, owner, repo, issueRequest)
+		logger.Info("create issue: %s", issueTitle)
 	}
 
 	return nil
