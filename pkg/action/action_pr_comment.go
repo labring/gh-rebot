@@ -51,7 +51,7 @@ func PRComment() error {
 	if err != nil {
 		return err
 	}
-	logger.Info("repo:%s, filename: %s, replaceTag: %s, prNumber: %d", repo, fileName, replaceTag, prNumber)
+	logger.Debug("repo:%s, filename: %s, replaceTag: %s, prNumber: %d", repo, fileName, replaceTag, prNumber)
 	ctx := context.Background()
 	client := github_go.GithubClient(ctx)
 	comments, _, err := client.Issues.ListComments(ctx, owner, repo, prNumber, nil)
@@ -60,26 +60,28 @@ func PRComment() error {
 	}
 	hiddenReplace := fmt.Sprintf("<!-- %s -->", replaceTag)
 	content := string(fileContent) + "\n" + hiddenReplace
-	createComment := func() {
-		comment := &github.IssueComment{Body: github.String(content)}
-		client.Issues.CreateComment(ctx, owner, repo, prNumber, comment)
-	}
-	if hiddenReplace == "" {
-		//add
-		createComment()
-		return nil
-	}
+
+	// Checks existing comments, edits if match found
 	for _, comment := range comments {
 		if comment.Body != nil && comment.ID != nil {
 			if *comment.Body == content {
-				logger.Info("The comment %d has been already added to the pull request. Skipping...", *comment.ID)
+				logger.Debug("The comment %d has been already added to the pull request. Skipping...", *comment.ID)
 				return nil
 			} else if hiddenReplace != "" && strings.LastIndex(*comment.Body, hiddenReplace) != -1 {
-				client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(content)})
+				_, _, err = client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(content)})
+				if err != nil {
+					return fmt.Errorf("Issues.EditComment returned error: %v", err)
+				}
 				return nil
 			}
 		}
 	}
-	createComment()
+
+	// Creates new comment
+	_, _, err = client.Issues.CreateComment(ctx, owner, repo, prNumber, &github.IssueComment{Body: github.String(content)})
+	if err != nil {
+		return fmt.Errorf("Issues.CreateComment returned error: %v", err)
+	}
+
 	return nil
 }

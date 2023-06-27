@@ -1,0 +1,33 @@
+name: 'Add cherry-pick comment when PR is merged'
+on:
+  pull_request:
+    types:
+      - closed
+
+jobs:
+  comment:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Comment cherry-pick command
+        uses: actions/github-script@v5
+        with:
+          script: |
+            const pr = context.payload.pull_request;
+            if (!pr.merged) {
+              console.log("PR is not merged. Skipping...");
+              return;
+            }
+            if (!pr.milestone || !pr.milestone.title) {
+              console.log("Milestone is not set. Skipping...");
+              return;
+            }
+            const milestone = pr.milestone.title;
+            const cherryPickCmd = `/cherry-pick ${milestone}-release`;
+            console.log(`Adding comment: ${cherryPickCmd}`);
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: pr.number,
+              body: cherryPickCmd
+            });
+          github-token: ${{ secrets.GH_PAT }}
