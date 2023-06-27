@@ -127,6 +127,7 @@ message:
   > 该功能v0.0.6 支持
   - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
   - `SEALOS_FILENAME: "README.md"` # PR文本替换回复文件位置
+  - `SEALOS_COMMENT: "/xxxx"` # comment的内容
   - `SEALOS_REPLACE_TAG: "TAG"` # 寻找标记，根据这个标记进行替换
 
 - [x] issue创建comment
