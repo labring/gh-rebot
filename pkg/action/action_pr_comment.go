@@ -29,9 +29,10 @@ import (
 
 // PRComment is a action to comment on PR
 func PRComment() error {
-	fileName, err := GetEnvFromAction("filename")
-	if err != nil {
-		return err
+	fileName, _ := GetEnvFromAction("filename")
+	commentBody, _ := GetEnvFromAction("comment")
+	if fileName == "" && commentBody == "" {
+		return fmt.Errorf("filename or comment is empty")
 	}
 	replaceTag, err := GetEnvFromAction("replace_tag")
 	if err != nil {
@@ -43,10 +44,14 @@ func PRComment() error {
 		return err
 	}
 
-	fileContent, err := os.ReadFile(fileName)
-	if err != nil {
-		return err
+	if fileName != "" {
+		fileContent, err := os.ReadFile(fileName)
+		if err != nil {
+			return err
+		}
+		commentBody = string(fileContent)
 	}
+
 	owner, repo, err := getRepo("")
 	if err != nil {
 		return err
@@ -59,7 +64,7 @@ func PRComment() error {
 		return fmt.Errorf("Issues.ListComments returned error: %v", err)
 	}
 	hiddenReplace := fmt.Sprintf("<!-- %s -->", replaceTag)
-	content := string(fileContent) + "\n" + hiddenReplace
+	content := commentBody + "\n" + hiddenReplace
 
 	// Checks existing comments, edits if match found
 	for _, comment := range comments {
