@@ -23,26 +23,21 @@ import (
 	"github.com/google/go-github/v39/github"
 	github_go "github.com/labring/gh-rebot/pkg/github-go"
 	"github.com/labring/gh-rebot/pkg/types"
+	"github.com/labring/gh-rebot/pkg/utils"
+	"k8s.io/apimachinery/pkg/apis/meta/v1/unstructured"
 	"os"
 	"strings"
 )
 
-// PRComment is a action to comment on PR
-func PRComment() error {
+// IssueComment is a action to comment on PR
+func IssueComment() error {
 	fileName, _ := GetEnvFromAction("filename")
 	commentBody, _ := GetEnvFromAction("comment")
 	if fileName == "" && commentBody == "" {
 		return fmt.Errorf("filename or comment is empty")
 	}
-	replaceTag, err := GetEnvFromAction("replace_tag")
-	if err != nil {
-		return err
-	}
-
+	replaceTag, _ := GetEnvFromAction("replace_tag")
 	prNumber := int(types.ActionConfigJSON.IssueOrPRNumber)
-	if err != nil {
-		return err
-	}
 
 	if fileName != "" {
 		fileContent, err := os.ReadFile(fileName)
@@ -50,6 +45,17 @@ func PRComment() error {
 			return err
 		}
 		commentBody = string(fileContent)
+	}
+	hiddenReplace := fmt.Sprintf("<!-- %s -->", replaceTag)
+	if replaceTag != "" {
+		commentBody = commentBody + "\n" + hiddenReplace
+	}
+
+	isReply, _ := GetEnvFromAction("isReply")
+	if isReply == "true" {
+		replyBody, _, _ := unstructured.NestedString(types.ActionConfigJSON.Data, "comment", "body")
+		replyBody = utils.QuoteReply(replyBody)
+		commentBody = strings.Join([]string{replyBody, commentBody}, "\r\n\r\n")
 	}
 
 	owner, repo, err := getRepo("")
@@ -63,27 +69,23 @@ func PRComment() error {
 	if err != nil {
 		return fmt.Errorf("Issues.ListComments returned error: %v", err)
 	}
-	hiddenReplace := fmt.Sprintf("<!-- %s -->", replaceTag)
-	content := commentBody + "\n" + hiddenReplace
-
 	// Checks existing comments, edits if match found
-	for _, comment := range comments {
-		if comment.Body != nil && comment.ID != nil {
-			if *comment.Body == content {
-				logger.Debug("The comment %d has been already added to the pull request. Skipping...", *comment.ID)
-				return nil
-			} else if hiddenReplace != "" && strings.LastIndex(*comment.Body, hiddenReplace) != -1 {
-				_, _, err = client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(content)})
-				if err != nil {
-					return fmt.Errorf("Issues.EditComment returned error: %v", err)
+	if replaceTag != "" {
+		for _, comment := range comments {
+			if comment.Body != nil && comment.ID != nil {
+				if hiddenReplace != "" && strings.LastIndex(*comment.Body, hiddenReplace) != -1 {
+					_, _, err = client.Issues.EditComment(ctx, owner, repo, *comment.ID, &github.IssueComment{Body: github.String(commentBody)})
+					if err != nil {
+						return fmt.Errorf("Issues.EditComment returned error: %v", err)
+					}
+					return nil
 				}
-				return nil
 			}
 		}
 	}
 
 	// Creates new comment
-	_, _, err = client.Issues.CreateComment(ctx, owner, repo, prNumber, &github.IssueComment{Body: github.String(content)})
+	_, _, err = client.Issues.CreateComment(ctx, owner, repo, prNumber, &github.IssueComment{Body: github.String(commentBody)})
 	if err != nil {
 		return fmt.Errorf("Issues.CreateComment returned error: %v", err)
 	}

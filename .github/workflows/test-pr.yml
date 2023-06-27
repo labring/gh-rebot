@@ -23,7 +23,7 @@ jobs:
         run: |
           gh-rebot action
         env:
-          SEALOS_TYPE: "pr_comment"
+          SEALOS_TYPE: "issue_comment"
           SEALOS_FILENAME: "templates/template.md"
           SEALOS_REPLACE_TAG: "DEFAULT"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
@@ -34,7 +34,7 @@ jobs:
         run: |
           gh-rebot action
         env:
-          SEALOS_TYPE: "pr_comment"
+          SEALOS_TYPE: "issue_comment"
           SEALOS_FILENAME: "templates/template.md"
           SEALOS_REPLACE_TAG: "DEFAULT"
           GH_TOKEN: "${{ secrets.GH_PAT }}"

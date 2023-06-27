@@ -34,10 +34,8 @@ var actionCmd = &cobra.Command{
 		switch actionType {
 		case "/comment":
 			err = action.CommentEngine()
-		case "pr_comment":
-			err = action.PRComment()
-		case "issue_comment_reply":
-			err = action.CommentReply()
+		case "issue_comment":
+			err = action.IssueComment()
 		case "issue_renew":
 			err = action.IssueRenew()
 		default:

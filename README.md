@@ -124,18 +124,11 @@ message:
   ```
   
 - [x] 支持PR文本替换回复
-  > 该功能v0.0.6 支持
+  > 该功能v0.0.8-rc2 支持
   - `SEALOS_TYPE: "pr_comment"` # PR文本替换回复
   - `SEALOS_FILENAME: "README.md"` # PR文本替换回复文件位置
   - `SEALOS_COMMENT: "/xxxx"` # comment的内容
   - `SEALOS_REPLACE_TAG: "TAG"` # 寻找标记，根据这个标记进行替换
-
-- [x] issue创建comment
-  > 该功能v0.0.7-rc2支持
-  
-  - `SEALOS_TYPE: "issue_comment_reply"` # issue创建comment，支持回复
-  - `SEALOS_FILENAME: "README.md"` # issue回复内容如果多可以写文件
-  - `SEALOS_COMMENT: "/xxxx"` # comment的内容
   - `SEALOS_ISREPLY: "true"` # 是否回复，根据当前的comment的内容追加
 
 - [x] issue自动创建

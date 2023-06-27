@@ -21,7 +21,7 @@ jobs:
         run: |
           gh-rebot action
         env:
-          SEALOS_TYPE: "issue_comment_reply"
+          SEALOS_TYPE: "issue_comment"
 #          SEALOS_FILENAME: "templates/template.md"
           SEALOS_COMMENT: "dfffdjh fdhjfhj gfrjghjf"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
@@ -33,14 +33,14 @@ jobs:
           gh-rebot action
         if: startswith(github.event.comment.body, '/comment')
         env:
-          SEALOS_TYPE: "issue_comment_reply"
+          SEALOS_TYPE: "issue_comment"
           SEALOS_FILENAME: "templates/template.md"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
       - run: |
           gh-rebot action
         if: startswith(github.event.comment.body, '/reply')
         env:
-          SEALOS_TYPE: "issue_comment_reply"
+          SEALOS_TYPE: "issue_comment"
           SEALOS_ISREPLY: "true"
           SEALOS_FILENAME: "templates/template.md"
           GH_TOKEN: "${{ secrets.GH_PAT }}"
