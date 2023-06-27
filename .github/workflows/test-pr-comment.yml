@@ -22,7 +22,27 @@ jobs:
               return;
             }
             const milestone = pr.milestone.title;
-            const cherryPickCmd = `/cherry-pick ${milestone}-release`;
+            const ref = `heads/release-${milestone}`;
+            let branchExists;
+            try {
+              await github.rest.git.getRef({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                ref: ref
+              });
+              branchExists = true;
+            } catch (error) {
+              if (error.status === 404) {
+                console.log(`Branch ${ref} does not exist. Skipping...`);
+                branchExists = false;
+              } else {
+                throw error; // Rethrow if it's another error
+              }
+            }
+            if (!branchExists) {
+              return;
+            }
+            const cherryPickCmd = `/cherry-pick release-${milestone}`;
             console.log(`Adding comment: ${cherryPickCmd}`);
             await github.rest.issues.createComment({
               owner: context.repo.owner,
