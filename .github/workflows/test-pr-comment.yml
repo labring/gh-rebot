@@ -1,6 +1,6 @@
 name: 'Add cherry-pick comment when PR is merged'
 on:
-  pull_request:
+  pull_request_target:
     types:
       - closed
 
