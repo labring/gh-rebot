@@ -1,3 +1,5 @@
+# 项目已经废弃，请移步 [robot](https://github.com/labring/robot)
+
 # gh-rebot 项目说明文档
 
 gh-rebot 是一个针对 sealos 项目的 GitHub rebot，用于自动执行一些常见操作，如发布新版本等。本文档将介绍该 rebot 的配置文件，并提供相应的使用指南。
